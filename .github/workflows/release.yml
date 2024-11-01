@@ -20,6 +20,11 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
+      - name: Install & Build & Test
+        run: |
+          yarn install --frozen-lockfile --registry=https://registry.npmmirror.com/
+          npm run build --if-present
+          npm test --if-present
       - name: Update Changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -30,5 +35,4 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npm ci
           npm publish
