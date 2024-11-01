@@ -1,14 +1,16 @@
 import { decode, encode } from 'base64-arraybuffer'
 import TransactionService from "../api/transactions"
-import { NET } from "../constants"
 import { concat } from '../utils'
 import PowDifficulty from '../utils/powDifficulty'
 import * as ed from '@noble/ed25519'
+import OverviewService from '../api/overview'
 
 class Transaction {
   private txnServices: TransactionService
-  constructor(net: NET) {
-    this.txnServices = new TransactionService(net)
+  private overViewServices: OverviewService
+  constructor() {
+    this.txnServices = new TransactionService()
+    this.overViewServices = new OverviewService()
   }
 
   async getTxn(hash: string) {
@@ -67,7 +69,7 @@ class Transaction {
 
   async getGas(originTxn: OriginalTxn) {
     const { function: func, args, delegatee, scale = 3, tokens } = originTxn
-    const avgGasPriceRes = await this.txnServices.getAverageGasPrice()
+    const avgGasPriceRes = await this.overViewServices.getAverageGasPrice()
     const avgGasPrice = avgGasPriceRes.Result?.AvgGasPrice || 0
     const to = args.to || args.To
 

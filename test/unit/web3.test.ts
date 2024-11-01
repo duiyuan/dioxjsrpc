@@ -32,4 +32,9 @@ describe("web3 unit test", () => {
     const txn = await web3.getTransaction(hash)
     expect(txn.Result.Hash).toEqual(hash)
   })
+
+  it('extract publicKey', async () => {
+    const pk = utils.extractPublicKey('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420')
+    expect(pk).toEqual('QZYSDAPQK4Q3442FX59Y2AJNSBX5MAZ3D6JAPB7JNGJRQQ5XQDDG')
+  })
 })

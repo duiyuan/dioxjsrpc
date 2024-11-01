@@ -4,10 +4,11 @@ import { fullAddress, isValidAddress } from "../utils"
 import AddressService from "../api/address"
 import { getDefaultToken, NET } from "../constants"
 import { Transaction } from './transaction'
+import provider from "../api/provider"
 // import { DioFunction } from "./constants"
 
 class Web3 {
-  private net: NET
+  private net: Provider
   private addrService: AddressService
   public composeTransaction: Transaction["compose"]
   public signTransaction: Transaction["sign"]
@@ -15,10 +16,11 @@ class Web3 {
   public sendTransaction: Transaction["send"]
   public getEstimatedFee: Transaction["getGas"]
 
-  constructor(net: NET) {
+  constructor(net: Provider) {
     this.net = net || NET.TEST
-    this.addrService = new AddressService(this.net)
-    const txn = new Transaction(this.net)
+    provider.set(this.net)
+    this.addrService = new AddressService()
+    const txn = new Transaction()
     this.composeTransaction = txn.compose.bind(txn)
     this.signTransaction = txn.sign.bind(txn)
     this.getTransaction = txn.getTxn.bind(txn)
@@ -27,17 +29,20 @@ class Web3 {
     console.log("Dioxide initialized with net: ", this.net)
   }
 
+  setProvider(net: Provider) {
+    provider.set(this.net)
+  }
+
   private checkAddress(address: string) {
     if (!address || !isValidAddress(address)) {
       throw new Error("Address is not valid")
     }
-    const [addr] = address.split(":")
-    address = addr + ':ed25519'
   }
 
   async getBalance(address: string) {
-    this.checkAddress(address)
-    return this.addrService.getBalance(fullAddress(address)).then((res) => {
+    const fullAddr = fullAddress(address)
+    this.checkAddress(fullAddr)
+    return this.addrService.getBalance(fullAddr).then((res) => {
       const dToken = getDefaultToken()
       const balance = res.Result?.State?.Balance.match(/\d+/g)
       if (res.Result?.Wallet) {
@@ -53,8 +58,15 @@ class Web3 {
   }
 
   async getAddressInfo(address: string) {
-    this.checkAddress(address)
-    return this.addrService.getBaseInfo(fullAddress(address))
+    const fullAddr = fullAddress(address)
+    this.checkAddress(fullAddr)
+    return this.addrService.getBaseInfo(fullAddr)
+  }
+
+  async getAddressTokens(address: string) {
+    const fullAddr = fullAddress(address)
+    this.checkAddress(fullAddr)
+    return this.addrService.getTokens(fullAddr)
   }
 }
 

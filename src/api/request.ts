@@ -1,9 +1,8 @@
 import querystring from 'query-string'
 import json from 'json-bigint'
 import fetch, { Response, RequestInit } from 'node-fetch'
-
 import { shakeKeyValue } from '../utils/string'
-import { getProvider, NET } from '../constants'
+import provider from './provider'
 
 
 function checkStatus(response: Response) {
@@ -15,21 +14,14 @@ function checkStatus(response: Response) {
 }
 
 export default class Fetcher {
-  private dioxideProvider: string
-  public rpcProvider: string
-  constructor(net: NET) {
-    const { dioxide, rpc } = getProvider(net)
-    this.dioxideProvider = dioxide + '/api'
-    this.rpcProvider = rpc
-  }
-
   prune = (url: string) => (url.endsWith('/') ? url.slice(0, -1) : url)
 
   get<T>(service: string, options: any): Promise<T> {
     return new Promise(async (res) => {
+      const { dioxide } = provider.get()
       options = { credentials: 'omit', ...options }
 
-      let absoluteUrl = service.startsWith('http') ? service : this.dioxideProvider + service
+      let absoluteUrl = service.startsWith('http') ? service : dioxide + service
 
       if (options.data) {
         const data = shakeKeyValue(options.data) || {}
@@ -44,6 +36,7 @@ export default class Fetcher {
 
   post<T>(service: string, options: RequestInit = {}): Promise<T> {
     return new Promise(async (res) => {
+      const { dioxide } = provider.get()
       const { body } = options
       const concatOption: RequestInit = {
         ...options,
@@ -52,7 +45,7 @@ export default class Fetcher {
       }
       const absoluteUrl = service.startsWith('http')
         ? service
-        : this.dioxideProvider + (service.startsWith('/') ? service.slice(1) : service)
+        : dioxide + (service.startsWith('/') ? service.slice(1) : service)
 
       fetch(absoluteUrl, concatOption)
         .then(checkStatus)

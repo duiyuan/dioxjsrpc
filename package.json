@@ -32,7 +32,8 @@
     "build:check": "node -e \"require('./lib')\"",
     "lint": "eslint --cache --cache-strategy content --ext .ts .",
     "lint:fix": "eslint --fix --ext .js,.ts .",
-    "test": "jest --config ./test/unit/jest.config.js"
+    "test": "jest --config ./test/unit/jest.config.js",
+    "watch": "onchange 'src/**/*' -- yarn build"
   },
   "repository": "git@github.com:duiyuan/web3.git",
   "author": "dioxide",
@@ -43,6 +44,7 @@
     "eslint": "^9.13.0",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",
+    "onchange": "^7.1.0",
     "prettier": "^3.3.3",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
@@ -52,7 +54,7 @@
     "@types/json-bigint": "^1.0.4",
     "@types/node-fetch": "^2.6.11",
     "base32-decode": "1.0.0",
-    "base32-encode": "2.0.0",
+    "base32-encode": "1",
     "base64-arraybuffer": "1.0.2",
     "crc-32": "1.2.2",
     "dotenv": "^16.4.5",

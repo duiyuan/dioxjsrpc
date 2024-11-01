@@ -1,6 +1,26 @@
 import Request from './request'
 
+type ListParmas = {
+  address?: string
+  addresstxntype?: string
+  shardIndex?: string
+  height?: number
+  pos?: number
+  limit?: number
+}
+
 class AddressService extends Request {
+
+  getListByAddress(params?: ListParmas) {
+    return this.get<DioxScanTxResponse>('', {
+      data: {
+        module: 'address',
+        action: 'listtxn',
+        ...params,
+      },
+    })
+  }
+
   getBaseInfo(address: string) {
     return this.get<CommonResponse<AddrBaseInfo>>('', {
       data: {
