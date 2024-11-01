@@ -43,10 +43,6 @@ console.log(balance);
 ### utils
 
 #### utils.toTokenAmount(amount: string, decimals: number)
-```
-  utils.toTokenAmount('100000000', 8)
-  // 100000000 -> 1
-```
 #### utils.isValidAddress(address: string)
 #### utils.extractPublicKey(address: string)
 
@@ -65,6 +61,3 @@ console.log(balance);
 | lint                           | Uses `eslint` to lint all packages                                 |
 | lint:fix                       | Uses `eslint` to check and fix any warnings                        |
 | test                           | Uses `jest` to run unit tests in each package                      |
-
-
-Returns the balance of an address at a given block.
