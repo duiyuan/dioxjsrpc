@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/duiyuan/web3/compare/v0.0.3...v0.0.4) (2024-11-01)
+
+
+### Features
+
+* update release ([bbb1195](https://github.com/duiyuan/web3/commit/bbb1195a85b8e4fb676950606fcce8297acba854))
+
 ### [0.0.3](https://github.com/duiyuan/web3/compare/v0.0.2...v0.0.3) (2024-11-01)
 
 
