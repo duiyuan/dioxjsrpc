@@ -44,15 +44,21 @@ export enum NET {
   TEST = 'test'
 }
 
-export function getProvider(net: NET) {
+export function getProvider(net: Provider) {
   if (net === NET.MAIN) {
     return {
-      dioxide: 'https://api.dioxide.network',
+      dioxide: 'https://api.dioxide.network/api',
       rpc: 'https://node-rpc.dioxide.network'
     }
   }
+  if (typeof net === 'object') {
+    return {
+      dioxide: net?.dioxide || 'http://47.100.78.190:7000/dev/api',
+      rpc: net?.rpc || 'http://139.224.254.200:62222'
+    }
+  }
   return {
-    dioxide: 'http://47.100.78.190:7000/dev',
+    dioxide: 'http://47.100.78.190:7000/dev/api',
     rpc: 'http://139.224.254.200:62222'
   }
 }
