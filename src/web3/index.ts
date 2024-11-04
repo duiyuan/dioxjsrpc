@@ -68,7 +68,8 @@ class Web3 {
   async getAddressInfo(address: string) {
     const fullAddr = fullAddress(address)
     this.checkAddress(fullAddr)
-    return this.addrService.getBaseInfo(fullAddr)
+    return this.addrService.getBaseInfo(fullAddr).then(res => res.Result).catch(err => ({
+    }))
   }
 
   async getAddressTokens(address: string) {
