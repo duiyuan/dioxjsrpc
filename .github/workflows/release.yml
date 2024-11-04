@@ -16,13 +16,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18
+          registry-url: 'https://registry.npmjs.org'
       - name: Setup git config
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
       - name: Install & Build & Test
         run: |
-          yarn install --frozen-lockfile --registry=https://registry.npmmirror.com/
+          yarn
           npm run build --if-present
           npm test --if-present
       - name: Update Changelog
@@ -35,4 +36,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          yarn publish --access public
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm publish --access public
