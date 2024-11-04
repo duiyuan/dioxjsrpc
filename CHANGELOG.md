@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/duiyuan/web3/compare/v0.0.1...v0.0.2) (2024-11-04)
+
+
+### Features
+
+* change registry-url ([3a96f5e](https://github.com/duiyuan/web3/commit/3a96f5e41b4e1c2889249999dfa8a471fa1f8b1e))
+
 ### 0.0.1 (2024-11-04)
 
 
