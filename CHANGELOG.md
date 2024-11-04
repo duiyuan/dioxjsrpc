@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/duiyuan/web3/compare/v0.0.1...v0.0.2) (2024-11-04)
+
+
+### Features
+
+* update readme & unit test ([957a685](https://github.com/duiyuan/web3/commit/957a6850e8dbf83acb81b8e6a88196ad1526f806))
+
 ### 0.0.1 (2024-11-01)
 
 
