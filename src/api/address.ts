@@ -10,6 +10,15 @@ type ListParmas = {
 }
 
 class AddressService extends Request {
+  getISN(address: string) {
+    return this.get<Override>('', {
+      data: {
+        module: 'address',
+        action: 'status',
+        address,
+      },
+    })
+  }
 
   getListByAddress(params?: ListParmas) {
     return this.get<DioxScanTxResponse>('', {
@@ -62,7 +71,6 @@ class AddressService extends Request {
       },
     })
   }
-
 }
 
 export default AddressService

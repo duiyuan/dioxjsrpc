@@ -1,5 +1,5 @@
 import { decode, encode } from 'base64-arraybuffer'
-import TransactionService from "../api/transactions"
+import TransactionService from '../api/transactions'
 import { concat } from '../utils'
 import PowDifficulty from '../utils/powDifficulty'
 import * as ed from '@noble/ed25519'
@@ -18,7 +18,9 @@ class Transaction {
   }
 
   async compose(originalTxn: OriginalTxn) {
-    const { ret, err } = await this.txnServices.compose(JSON.stringify(originalTxn))
+    const { ret, err } = await this.txnServices.compose(
+      JSON.stringify(originalTxn),
+    )
     if (err) {
       throw new Error(ret.toString())
     }
@@ -45,7 +47,7 @@ class Transaction {
       JSON.stringify({
         txdata: encode(signData),
         address: originTxn.sender,
-      })
+      }),
     )
     if (err) {
       throw new Error(ret.toString())
@@ -53,7 +55,10 @@ class Transaction {
     return ret.Hash
   }
 
-  private insertPK(txData: string, pkList: { encryptedMethodOrderNumber: number; publicKey: Uint8Array }[]): Uint8Array {
+  private insertPK(
+    txData: string,
+    pkList: { encryptedMethodOrderNumber: number; publicKey: Uint8Array }[],
+  ): Uint8Array {
     const originTxData = new Uint8Array(decode(txData))
 
     const secSuites: Uint8Array[] = []
@@ -69,8 +74,8 @@ class Transaction {
 
   async getGas(originTxn: OriginalTxn) {
     const { function: func, args, delegatee, scale = 3, tokens } = originTxn
-    const avgGasPriceRes = await this.overViewServices.getAverageGasPrice()
-    const avgGasPrice = avgGasPriceRes.Result?.AvgGasPrice || 0
+    const overview = await this.overViewServices.chainStatus()
+    const avgGasPrice = overview.Result?.AvgGasPrice || 0
     const to = args.to || args.To
 
     const { ret, err } = await this.txnServices.compose(
@@ -81,11 +86,11 @@ class Transaction {
         function: func,
         args,
         tokens,
-      })
+      }),
     )
     if (err) {
       throw new Error(
-        'services.compose failed: txdata is empty(' + ret.toString() + ')'
+        'services.compose failed: txdata is empty(' + ret.toString() + ')',
       )
     }
 
@@ -108,7 +113,6 @@ class Transaction {
     const gasFee = gasPrice * gasLimit
     return gasFee
   }
-
 }
 
 export { Transaction }

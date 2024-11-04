@@ -1,20 +1,24 @@
-
-
-import { fullAddress, isValidAddress } from "../utils"
-import AddressService from "../api/address"
-import { getDefaultToken, NET } from "../constants"
+import { fullAddress, isValidAddress } from '../utils'
+import AddressService from '../api/address'
+import { getDefaultToken, NET } from '../constants'
 import { Transaction } from './transaction'
-import provider from "../api/provider"
+import provider from '../api/provider'
+import Blocks from '../api/block'
+import Overview from '../api/overview'
+
 // import { DioFunction } from "./constants"
 
 class Web3 {
   private net: Provider
   private addrService: AddressService
-  public composeTransaction: Transaction["compose"]
-  public signTransaction: Transaction["sign"]
-  public getTransaction: Transaction["getTxn"]
-  public sendTransaction: Transaction["send"]
-  public getEstimatedFee: Transaction["getGas"]
+  public composeTransaction: Transaction['compose']
+  public signTransaction: Transaction['sign']
+  public getTransaction: Transaction['getTxn']
+  public sendTransaction: Transaction['send']
+  public getEstimatedFee: Transaction['getGas']
+
+  blocks: Blocks
+  overview: Overview
 
   constructor(net: Provider) {
     this.net = net || NET.TEST
@@ -26,7 +30,11 @@ class Web3 {
     this.getTransaction = txn.getTxn.bind(txn)
     this.sendTransaction = txn.send.bind(txn)
     this.getEstimatedFee = txn.getGas.bind(txn)
-    console.log("Dioxide initialized with net: ", this.net)
+
+    this.blocks = new Blocks()
+    this.overview = new Overview()
+
+    console.log('Dioxide initialized with net: ', this.net)
   }
 
   setProvider(net: Provider) {
@@ -35,7 +43,7 @@ class Web3 {
 
   private checkAddress(address: string) {
     if (!address || !isValidAddress(address)) {
-      throw new Error("Address is not valid")
+      throw new Error('Address is not valid')
     }
   }
 
@@ -47,7 +55,7 @@ class Web3 {
       const balance = res.Result?.State?.Balance.match(/\d+/g)
       if (res.Result?.Wallet) {
         const defaultToken = res.Result?.Wallet?.find(
-          (w) => w.symbol === dToken.symbol
+          (w) => w.symbol === dToken.symbol,
         )
         if (defaultToken) {
           return BigInt((defaultToken?.amount || '0').toString().split(':')[0])
@@ -70,6 +78,4 @@ class Web3 {
   }
 }
 
-export {
-  Web3
-}
+export { Web3 }

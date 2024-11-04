@@ -124,6 +124,24 @@ declare namespace DIOX {
       series: number
     }
   }
+
+  interface ChainStatus {
+    BlockInterval: number
+    ForkRate: number
+    TotalBlocks: number
+    Difficulty: number
+    AvgGasPrice: number
+    ShardOrder: number
+    Throughput: number
+    TotalTxn: number
+    TotalStateSize: number
+    MempoolSize: number
+    AddressCount: number
+    Height: number
+    DeployName: string
+    ChainVersion: number
+    NumShards: number
+  }
 }
 
 interface TokenItem {
@@ -156,7 +174,6 @@ interface AddrBalance {
   Wallet: { symbol: string; amount: string }[]
 }
 
-
 interface Blocks {
   TotalNum: number
   TxType: string
@@ -168,9 +185,7 @@ type DioxScanTxResponse = CommonResponse<{
   ListData: DIOX.TxSummary[]
 }>
 
-type DioxScanChainBasicInfo = CommonResponse<{
-  AvgGasPrice: number
-}>
+type DioxScanChainBasicInfo = CommonResponse<DIOX.ChainStatus>
 
 type Override = CommonResponse<{
   Address: string
@@ -182,7 +197,7 @@ interface OriginalTxn {
   gasprice: string
   sender: string
   function: string
-  args: KeyValue,
+  args: KeyValue
   delegatee?: string
   gaslimit?: string
   tokens?: string[]
