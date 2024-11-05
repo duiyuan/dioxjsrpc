@@ -23,7 +23,7 @@ import { Web3, NET } from '@dioxide-js/web3.js';
 const web3 = new Web3(NET.TEST);
 
 // Get the balance of an address
-const balance = await web3.getBalance('0x1234567890abcdef1234567890abcdef12345678');
+const balance = await web3.addr.getBalance('0x1234567890abcdef1234567890abcdef12345678');
 console.log(balance);
 ```
 

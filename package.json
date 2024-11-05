@@ -35,10 +35,6 @@
     "test": "jest --config ./test/unit/jest.config.js",
     "watch": "onchange \"src/**/*\" -- yarn build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/duiyuan/web3.git"
-  },
   "author": "dioxide",
   "license": "MIT",
   "devDependencies": {
