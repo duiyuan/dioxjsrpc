@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/duiyuan/web3/compare/v0.0.2...v0.0.3) (2024-11-05)
+
+
+### Features
+
+* change registry-url ([457f83c](https://github.com/duiyuan/web3/commit/457f83c6b43b6e49762bd086008b0235fc3cac0b))
+* reset tag ([bab8ec2](https://github.com/duiyuan/web3/commit/bab8ec27958ad80ec8d1f5ae38fd5a8885cccfa5))
+* update pkg init & export DIOX ([f5044ed](https://github.com/duiyuan/web3/commit/f5044ed17be86a234d2b46de0d95e4a2dc05ff36))
+* update readme & package.json ([f032638](https://github.com/duiyuan/web3/commit/f032638fde12865123e4843e07093538f779a0c3))
+* update readme & unit test ([0985eef](https://github.com/duiyuan/web3/commit/0985eefe7e7d834aa6ef82a36cd27a4b21c9c887))
+* update release ([d04eb02](https://github.com/duiyuan/web3/commit/d04eb0275ecb5b33db684fc2c8405985b300ae75))
+
+
+### Bug Fixes
+
+* enbrace the pattern with quotes rather than single quotes ([8a53cd1](https://github.com/duiyuan/web3/commit/8a53cd1b6df20e20b979e68547d6e7fd6f3f2cf7))
+
 ### [0.0.2](https://github.com/duiyuan/web3/compare/v0.0.1...v0.0.2) (2024-11-04)
 
 
