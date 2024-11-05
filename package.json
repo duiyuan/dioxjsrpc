@@ -26,8 +26,8 @@
   ],
   "scripts": {
     "build": "concurrently --kill-others-on-fail \"yarn:build:*(!check) \"",
-    "build:cjs": "tsc --build tsconfig.cjs.json && echo {\"type\": \"commonjs\"} > ./lib/commonjs/package.json",
-    "build:esm": "tsc --build tsconfig.esm.json && echo {\"type\": \"module\"} > ./lib/esm/package.json",
+    "build:cjs": "tsc --build tsconfig.cjs.json && node ./cjspkg",
+    "build:esm": "tsc --build tsconfig.esm.json && node ./esmpkg",
     "build:types": "tsc --build tsconfig.types.json",
     "build:check": "node -e \"require('./lib')\"",
     "lint": "eslint --cache --cache-strategy content --ext .ts .",

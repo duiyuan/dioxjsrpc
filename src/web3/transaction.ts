@@ -72,7 +72,7 @@ class Transaction {
     return result
   }
 
-  async getGas(originTxn: OriginalTxn) {
+  async getEstimatedFee(originTxn: OriginalTxn) {
     const { function: func, args, delegatee, scale = 3, tokens } = originTxn
     const overview = await this.overViewServices.chainStatus()
     const avgGasPrice = overview.Result?.AvgGasPrice || 0

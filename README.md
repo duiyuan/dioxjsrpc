@@ -29,16 +29,18 @@ console.log(balance);
 
 ## API
 
-### web3
+### web3.addr
 
-#### web3.getBalance(address: string)
-#### web3.getAddressTokens(address: string)
-#### web3.getAddressInfo(address: string)
-#### web3.composeTransaction(originalTxn: OriginalTxn): 
-#### web3.signTransaction(txdata: string, secretKey: string): 
-#### web3.sendTransaction(originalTxn: OriginalTxn, secretKey: string)
-#### web3.getTransaction(hash: string)
-#### web3.getEstimatedFee(originTxn: OriginalTxn)
+#### web3.addr.getBalance(address: string)
+#### web3.addr.getAddressTokens(address: string)
+#### web3.addr.getAddressInfo(address: string)
+
+### web3.txn
+#### web3.txn.compose(originalTxn: OriginalTxn): 
+#### web3.txn.sign(txdata: string, secretKey: string): 
+#### web3.txn.send(originalTxn: OriginalTxn, secretKey: string)
+#### web3.txn.getTxn(hash: string)
+#### web3.txn.getEstimatedFee(originTxn: OriginalTxn)
 
 ### utils
 

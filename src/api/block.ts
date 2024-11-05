@@ -1,5 +1,5 @@
 import provider from './provider'
-import Request from './request'
+import Request, { DIOX } from './request'
 
 class BlockSvc extends Request {
   getExcutedTx(params: { height: number; limit?: number; pos?: number }) {
