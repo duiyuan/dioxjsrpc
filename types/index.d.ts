@@ -10,122 +10,6 @@ interface CommonResponse<T> {
   Result?: T
 }
 
-declare namespace DIOX {
-  interface MetaData {
-    Description?: string
-    IconUrl?: string
-    Name?: string
-    Website?: string
-    Social?: {
-      Github: string
-      Discord: string
-      Twitter: string
-      Telegram: string
-      Facebook: string
-      Email: string
-    }
-  }
-
-  interface TxSummary {
-    Height: number
-    ShardIndex: number
-    ExecIndex: number
-    RelayGroupIndex: number
-    ShardOrder: number
-    BlockTime: number
-    TxnHash: string
-    TxnType: string
-    Initiator: string
-    Target: string
-    OriginalTxnHash: string
-    Invocation: any
-    TxnTime: number
-    Func: string
-  }
-
-  interface TxDetail {
-    BlockTime: number
-    Height: number
-    Initiator: string
-    Address: string
-    BuildNum: number
-    ConfirmedBy: string
-    ConfirmState?: string
-    ExecStage: string
-    Function: string
-    GasOffered: number
-    GasPrice: string
-    Grouped: false
-    Hash: string
-    Packing?: string // 是否打包交易
-    Relays?: Array<TxDetail> // 交易打包列表
-    Input: {
-      [key: string]: string | number
-    }
-    Invocation: {
-      [key: string]: string | number
-    }
-    Mode: string
-    OrigExecIdx: number
-    OrigTxHash: string
-    Shard: number[]
-    Size: number
-    Signers?: string[]
-    Timestamp: number
-    ISN?: number
-  }
-
-  interface Block {
-    Height: number
-    BlockTime: number
-    Initiator: string
-    Target: string
-    IsFinalized: number | undefined
-    Invocation: {
-      Return: number | any
-      Input: {
-        Reward: string
-        Amount: string
-        To: string
-        [key: string]: any
-      }
-      GasOffered?: number
-      GasPrice?: number
-      GasFee?: number
-      TokenSupply?: string[]
-    }
-    Func: string
-    TxnHash: string
-    TxnStatus: string
-    RelayReturn: string
-    TokenSymbol?: string
-    TokenInitial?: string
-    TokenDecimals?: number
-    RelayGroupIndex: number
-    TokenAmount?: string
-  }
-
-  interface Address {
-    Symbol?: string
-    Delegator?: string
-    TotalSupply?: string
-    ID?: number
-    Flags?: number // 右移22位取低6位 代表Decimals
-    Metadata?: MetaData
-    Address?: string
-    Balance?: string
-    Height?: number
-    Name?: string
-    Hash?: string
-    Wallet?: { [id: string]: string | number }[]
-    Definition?: {
-      hash: string
-      name: string
-      series: number
-    }
-  }
-}
-
 interface TokenItem {
   Address?: string
   TokenID: number
@@ -156,7 +40,6 @@ interface AddrBalance {
   Wallet: { symbol: string; amount: string }[]
 }
 
-
 interface Blocks {
   TotalNum: number
   TxType: string
@@ -168,9 +51,7 @@ type DioxScanTxResponse = CommonResponse<{
   ListData: DIOX.TxSummary[]
 }>
 
-type DioxScanChainBasicInfo = CommonResponse<{
-  AvgGasPrice: number
-}>
+type DioxScanChainBasicInfo = CommonResponse<DIOX.ChainStatus>
 
 type Override = CommonResponse<{
   Address: string
@@ -182,7 +63,7 @@ interface OriginalTxn {
   gasprice: string
   sender: string
   function: string
-  args: KeyValue,
+  args: KeyValue
   delegatee?: string
   gaslimit?: string
   tokens?: string[]

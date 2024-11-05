@@ -1,4 +1,6 @@
-import Request from './request'
+import { getDefaultToken } from '../constants'
+import { fullAddress, isValidAddress } from '../utils'
+import Request, { DIOX } from './request'
 
 type ListParmas = {
   address?: string
@@ -11,6 +13,22 @@ type ListParmas = {
 
 class AddressService extends Request {
 
+  private checkAddress(address: string) {
+    if (!address || !isValidAddress(address)) {
+      throw new Error('Address is not valid')
+    }
+  }
+
+  getISN(address: string) {
+    return this.get<Override>('', {
+      data: {
+        module: 'address',
+        action: 'status',
+        address,
+      },
+    })
+  }
+
   getListByAddress(params?: ListParmas) {
     return this.get<DioxScanTxResponse>('', {
       data: {
@@ -21,14 +39,16 @@ class AddressService extends Request {
     })
   }
 
-  getBaseInfo(address: string) {
+  getAddressInfo(address: string) {
+    const fullAddr = fullAddress(address)
     return this.get<CommonResponse<AddrBaseInfo>>('', {
       data: {
         module: 'address',
         action: 'baseinfo',
-        address: address.replace(/#/g, '%23'),
+        address: fullAddr.replace(/#/g, '%23'),
       },
-    })
+    }).then(res => res.Result).catch(err => ({
+    }))
   }
 
   getDetailInfo(address: string) {
@@ -42,27 +62,42 @@ class AddressService extends Request {
   }
 
   getBalance(address: string) {
+    const fullAddr = fullAddress(address)
+    this.checkAddress(fullAddr)
     return this.get<CommonResponse<AddrBalance>>('', {
       data: {
         module: 'address',
         action: 'balance',
-        address: address.replace(/#/g, '%23'),
+        address: fullAddr.replace(/#/g, '%23'),
       },
+    }).then((res) => {
+      const dToken = getDefaultToken()
+      const balance = res.Result?.State?.Balance.match(/\d+/g)
+      if (res.Result?.Wallet) {
+        const defaultToken = res.Result?.Wallet?.find(
+          (w) => w.symbol === dToken.symbol,
+        )
+        if (defaultToken) {
+          return BigInt((defaultToken?.amount || '0').toString().split(':')[0])
+        }
+      }
+      return balance ? BigInt(balance[0]) : BigInt(0)
     })
   }
 
-  getTokens(address: string) {
+  getAddressTokens(address: string) {
+    const fullAddr = fullAddress(address)
+    this.checkAddress(fullAddr)
     return this.get<
       CommonResponse<{ TotalNum: number; ListData: TokenItem[] }>
     >('', {
       data: {
         module: 'address',
         action: 'tokens',
-        address: address.replace(/#/g, '%23'),
+        address: fullAddr.replace(/#/g, '%23'),
       },
     })
   }
-
 }
 
 export default AddressService
