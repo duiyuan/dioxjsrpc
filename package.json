@@ -33,7 +33,7 @@
     "lint": "eslint --cache --cache-strategy content --ext .ts .",
     "lint:fix": "eslint --fix --ext .js,.ts .",
     "test": "jest --config ./test/unit/jest.config.js",
-    "watch": "onchange 'src/**/*' -- yarn build"
+    "watch": "onchange \"src/**/*\" -- yarn build"
   },
   "repository": "git@github.com:duiyuan/web3.git",
   "author": "dioxide",
