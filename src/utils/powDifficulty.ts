@@ -1,5 +1,5 @@
-const sha256 = require('js-sha256')
-const sha512 = require('js-sha512').sha512
+import { sha256 } from 'js-sha256'
+import { sha512 } from 'js-sha512'
 const NONCE_LEN = 12
 
 class PowDifficulty {
@@ -73,7 +73,7 @@ class PowDifficulty {
     // set diffculty
     this.Set(
       (1000 + (this.originTxn.byteLength + NONCE_LEN) * (this.ttl * 10 + 100)) /
-      3
+        3,
     )
     // loop nonce
     const nonces: number[] = []
@@ -103,7 +103,7 @@ class PowDifficulty {
     nonces.forEach((nonce, i) => {
       finalBytes.set(
         new Uint8Array(new Uint32Array([nonce]).buffer),
-        this.originTxn.byteLength + i * 4
+        this.originTxn.byteLength + i * 4,
       )
     })
     return finalBytes.buffer
