@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/duiyuan/web3/compare/v0.0.3...v0.0.4) (2024-11-06)
+
+
+### Features
+
+* add getAddressTokenBalance ([3263e16](https://github.com/duiyuan/web3/commit/3263e1699d928dfc578e56b44b19acf663f74f37))
+
 ### [0.0.3](https://github.com/duiyuan/web3/compare/v0.0.2...v0.0.3) (2024-11-05)
 
 
