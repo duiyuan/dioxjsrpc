@@ -10,6 +10,7 @@ export enum DioFunction {
   TOKEN_BID = 'token_bid@address.delegation.core',
   MINT_TOKEN = 'core.token_stats.address.supply_change',
   MINT_NFT = 'nonfungible_init@address.delegation.core',
+  MINTED = 'core.coin.global.minted',
   TRANSFER = 'core.coin.transfer',
   TRANSFER_TOKEN_DIO = 'core.wallet.transfer',
   TRANSFER_NFT = 'transfer@address.vault.core',
@@ -35,30 +36,30 @@ export enum DioFunction {
 export function getDefaultToken() {
   return {
     symbol: 'DIO',
-    decimals: 8
+    decimals: 8,
   }
 }
 
 export enum NET {
   MAIN = 'main',
-  TEST = 'test'
+  TEST = 'test',
 }
 
 export function getProvider(net: Provider) {
   if (net === NET.MAIN) {
     return {
       dioxide: 'https://api.dioxide.network/api',
-      rpc: 'https://node-rpc.dioxide.network'
+      rpc: 'https://node-rpc.dioxide.network',
     }
   }
   if (typeof net === 'object') {
     return {
       dioxide: net?.dioxide || 'http://47.100.78.190:7000/dev/api',
-      rpc: net?.rpc || 'http://139.224.254.200:62222'
+      rpc: net?.rpc || 'http://139.224.254.200:62222',
     }
   }
   return {
     dioxide: 'http://47.100.78.190:7000/dev/api',
-    rpc: 'http://139.224.254.200:62222'
+    rpc: 'http://139.224.254.200:62222',
   }
 }

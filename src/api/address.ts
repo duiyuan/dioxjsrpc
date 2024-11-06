@@ -98,6 +98,21 @@ class AddressService extends Request {
       },
     })
   }
+
+  async getAddressTokenBalance(address: string, token: string) {
+    const fullAddr = fullAddress(address)
+    this.checkAddress(fullAddr)
+    const res = await this.getDetailInfo(address)
+    if (res?.Result?.Wallet) {
+      const defaultToken = res.Result?.Wallet?.find(
+        (w) => w.symbol === token.split(':')[0],
+      )
+      if (defaultToken) {
+        return defaultToken.amount
+      }
+    }
+    return 0
+  }
 }
 
 export default AddressService

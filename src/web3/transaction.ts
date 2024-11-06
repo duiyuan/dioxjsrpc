@@ -75,7 +75,7 @@ class Transaction {
   async getEstimatedFee(originTxn: OriginalTxn) {
     const { function: func, args, delegatee, scale = 3, tokens } = originTxn
     const overview = await this.overViewServices.chainStatus()
-    const avgGasPrice = overview.Result?.AvgGasPrice || 0
+    const avgGasPrice = overview?.AvgGasPrice || 0
     const to = args.to || args.To
 
     const { ret, err } = await this.txnServices.compose(

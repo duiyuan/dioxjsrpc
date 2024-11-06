@@ -69,26 +69,30 @@ export declare namespace DIOX {
     ISN?: number
   }
 
-  interface Block {
+  interface Invocation {
+    Return: [number, number]
+    Input: {
+      Reward: string
+      Amount: string
+      To: string
+      [key: string]: any
+    }
+    GasOffered?: string
+    GasPrice?: string
+    GasFee?: string
+    TokenSupply?: string[]
+  }
+
+  interface ExcutedTx {
     Height: number
     BlockTime: number
     Initiator: string
     Target: string
     IsFinalized: number | undefined
-    Invocation: {
-      Return: number | any
-      Input: {
-        Reward: string
-        Amount: string
-        To: string
-        [key: string]: any
-      }
-      GasOffered?: number
-      GasPrice?: number
-      GasFee?: number
-      TokenSupply?: string[]
-    }
+    OriginalTxnHash: string
+    Invocation: Invocation
     Func: string
+    Contract: string
     TxnHash: string
     TxnStatus: string
     RelayReturn: string
@@ -97,6 +101,11 @@ export declare namespace DIOX {
     TokenDecimals?: number
     RelayGroupIndex: number
     TokenAmount?: string
+  }
+
+  interface BlockResp {
+    TotalNum: number
+    ListData: ExcutedTx[]
   }
 
   interface Address {
