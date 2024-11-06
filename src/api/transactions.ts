@@ -1,4 +1,3 @@
-import { DIOX } from '../../lib/commonjs'
 import provider from './provider'
 import Request from './request'
 
