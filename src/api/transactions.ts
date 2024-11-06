@@ -1,7 +1,6 @@
 import provider from './provider'
 import Request from './request'
 
-
 export function getComposeUrl() {
   const { rpc } = provider.get()
   const encodeUri = encodeURI(rpc + '/api?req=tx.compose')
@@ -19,7 +18,6 @@ export function getSendUrl() {
 }
 
 class TransactionService extends Request {
-
   compose(body: string) {
     return this.post<{
       err?: number
@@ -36,14 +34,17 @@ class TransactionService extends Request {
     }>(getSendUrl(), { body })
   }
 
-  getTransactionByHash(hash: string) {
-    return this.get<DioxScanTxResponse>('', {
+  async getTransactionByHash(hash: string) {
+    const { Status, Message, Result } = await this.get<DioxScanTxResponse>('', {
       data: {
         module: 'txn',
         action: 'details',
         hash,
       },
     })
+
+    if (!Status) throw Message
+    return Result
   }
 }
 
