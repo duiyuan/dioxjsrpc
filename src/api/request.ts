@@ -147,6 +147,27 @@ export declare namespace DIOX {
   }
 }
 
+export interface OriginalTxn {
+  gasprice: string
+  sender: string
+  function: string
+  args: KeyValue
+  delegatee?: string
+  gaslimit?: string
+  tokens?: { [key: string]: string }[]
+  scale?: number
+}
+
+export interface AddrBalance {
+  Address: string
+  Height: 49
+  State: {
+    Balance: string
+  }
+  Wallet: { symbol: string; amount: string }[]
+}
+
+
 function checkStatus(response: Response) {
   if (response.ok) {
     return response

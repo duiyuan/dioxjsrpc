@@ -4,6 +4,9 @@ import { concat } from '../utils'
 import PowDifficulty from '../utils/powDifficulty'
 import * as ed from '@noble/ed25519'
 import OverviewService from '../api/overview'
+import { sha256 } from 'js-sha256'
+import base32Encode from 'base32-encode'
+import { OriginalTxn } from '../api/request'
 
 class Transaction {
   private txnServices: TransactionService
@@ -27,8 +30,8 @@ class Transaction {
     return ret.TxData
   }
 
-  async sign(txdata: string, secretKey: string) {
-    const unit8ArraySecrectKey = new Uint8Array(decode(secretKey))
+  async sign(txdata: string, secretKey: Uint8Array) {
+    const unit8ArraySecrectKey = secretKey
     const pk = await ed.getPublicKey(unit8ArraySecrectKey)
     const dataWithPK = this.insertPK(txdata, [
       { encryptedMethodOrderNumber: 0x3, publicKey: pk },
@@ -37,16 +40,30 @@ class Transaction {
     const finalInfo = concat(dataWithPK, signedInfo)
     const powDiff = new PowDifficulty(finalInfo.buffer)
     const finalInfowithNonce = powDiff.getHashMixinNonnce()
-    return finalInfowithNonce
+    return {
+      rawTxData: encode(finalInfowithNonce),
+      hash: base32Encode(sha256.arrayBuffer(finalInfowithNonce), "Crockford"),
+    }
   }
 
-  async send(originTxn: OriginalTxn, secretKey: string) {
+  async send(originTxn: OriginalTxn, secretKey: Uint8Array) {
     const txData = await this.compose(originTxn)
-    const signData = await this.sign(txData, secretKey)
+    const { rawTxData: signData } = await this.sign(txData, secretKey)
     const { ret, err } = await this.txnServices.sendTransaction(
       JSON.stringify({
-        txdata: encode(signData),
-        address: originTxn.sender,
+        txdata: signData,
+      }),
+    )
+    if (err) {
+      throw new Error(ret.toString())
+    }
+    return ret.Hash
+  }
+
+  async sendWithRaw(rawTxData: string) {
+    const { ret, err } = await this.txnServices.sendTransaction(
+      JSON.stringify({
+        txdata: rawTxData,
       }),
     )
     if (err) {
@@ -70,6 +87,11 @@ class Transaction {
     })
     const result = concat(originTxData, ...secSuites)
     return result
+  }
+
+  async getGasPrice() {
+    const overview = await this.overViewServices.chainStatus()
+    return overview.Result?.AvgGasPrice || 0
   }
 
   async getEstimatedFee(originTxn: OriginalTxn) {
