@@ -42,7 +42,7 @@ class Transaction {
     const finalInfowithNonce = powDiff.getHashMixinNonnce()
     return {
       rawTxData: encode(finalInfowithNonce),
-      hash: base32Encode(sha256.arrayBuffer(finalInfowithNonce), "Crockford"),
+      hash: base32Encode(sha256.arrayBuffer(finalInfowithNonce), 'Crockford'),
     }
   }
 
@@ -60,7 +60,7 @@ class Transaction {
     return ret.Hash
   }
 
-  async sendWithRaw(rawTxData: string) {
+  async sendRawTx(rawTxData: string) {
     const { ret, err } = await this.txnServices.sendTransaction(
       JSON.stringify({
         txdata: rawTxData,
@@ -87,11 +87,6 @@ class Transaction {
     })
     const result = concat(originTxData, ...secSuites)
     return result
-  }
-
-  async getGasPrice() {
-    const overview = await this.overViewServices.chainStatus()
-    return overview.Result?.AvgGasPrice || 0
   }
 
   async getEstimatedFee(originTxn: OriginalTxn) {
