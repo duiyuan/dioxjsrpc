@@ -18,14 +18,16 @@ class AddressService extends Request {
     }
   }
 
-  getISN(address: string) {
-    return this.get<Override>('', {
+  async getISN(address: string) {
+    const { Status, Message, Result } = await this.get<Override>('', {
       data: {
         module: 'address',
         action: 'status',
         address,
       },
     })
+    if (Status) throw Message
+    return Result?.NextISN || 0
   }
 
   getListByAddress(params?: ListParmas) {
@@ -116,7 +118,6 @@ class AddressService extends Request {
     }
     return '0'
   }
-
 }
 
 export default AddressService
