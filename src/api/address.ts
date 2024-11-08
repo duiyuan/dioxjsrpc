@@ -113,6 +113,7 @@ class AddressService extends Request {
     }
     return 0
   }
+
 }
 
 export default AddressService

@@ -148,12 +148,12 @@ export declare namespace DIOX {
 }
 
 export interface OriginalTxn {
-  gasprice: string
+  gasprice: string | number
   sender: string
   function: string
   args: KeyValue
-  delegatee?: string
-  gaslimit?: string
+  delegatee?: string | number
+  gaslimit?: string | number
   tokens?: { [key: string]: string }[]
   scale?: number
 }
