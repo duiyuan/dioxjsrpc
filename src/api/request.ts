@@ -32,7 +32,7 @@ export declare namespace DIOX {
     Initiator: string
     Target: string
     OriginalTxnHash: string
-    Invocation: any
+    Invocation: Invocation
     TxnTime: number
     Func: string
   }
@@ -56,9 +56,7 @@ export declare namespace DIOX {
     Input: {
       [key: string]: string | number
     }
-    Invocation: {
-      [key: string]: string | number
-    }
+    Invocation: Invocation
     Mode: string
     OrigExecIdx: number
     OrigTxHash: string
@@ -166,7 +164,6 @@ export interface AddrBalance {
   }
   Wallet: { symbol: string; amount: string }[]
 }
-
 
 function checkStatus(response: Response) {
   if (response.ok) {

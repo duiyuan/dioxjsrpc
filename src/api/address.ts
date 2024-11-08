@@ -12,7 +12,6 @@ type ListParmas = {
 }
 
 class AddressService extends Request {
-
   private checkAddress(address: string) {
     if (!address || !isValidAddress(address)) {
       throw new Error('Address is not valid')
@@ -47,8 +46,9 @@ class AddressService extends Request {
         action: 'baseinfo',
         address: fullAddr.replace(/#/g, '%23'),
       },
-    }).then(res => res.Result).catch(err => ({
-    }))
+    })
+      .then((res) => res.Result)
+      .catch((err) => ({}))
   }
 
   getDetailInfo(address: string) {
@@ -61,7 +61,7 @@ class AddressService extends Request {
     })
   }
 
-  getBalance(address: string) {
+  getBalance(address: string): Promise<string> {
     const fullAddr = fullAddress(address)
     this.checkAddress(fullAddr)
     return this.get<CommonResponse<AddrBalance>>('', {
@@ -78,10 +78,10 @@ class AddressService extends Request {
           (w) => w.symbol === dToken.symbol,
         )
         if (defaultToken) {
-          return BigInt((defaultToken?.amount || '0').toString().split(':')[0])
+          return (defaultToken?.amount || '0').toString().split(':')[0]
         }
       }
-      return balance ? BigInt(balance[0]) : BigInt(0)
+      return balance?.[0] ?? '0'
     })
   }
 
@@ -99,7 +99,10 @@ class AddressService extends Request {
     })
   }
 
-  async getAddressTokenBalance(address: string, token: string) {
+  async getAddressTokenBalance(
+    address: string,
+    token: string,
+  ): Promise<string> {
     const fullAddr = fullAddress(address)
     this.checkAddress(fullAddr)
     const res = await this.getDetailInfo(address)
@@ -108,10 +111,10 @@ class AddressService extends Request {
         (w) => w.symbol === token.split(':')[0],
       )
       if (defaultToken) {
-        return defaultToken.amount
+        return defaultToken.amount.toString()
       }
     }
-    return 0
+    return '0'
   }
 
 }
