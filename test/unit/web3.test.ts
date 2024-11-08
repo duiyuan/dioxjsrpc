@@ -1,4 +1,5 @@
 const { Web3, utils, NET } = require('../../lib/commonjs')
+const { decode } = require('base64-arraybuffer')
 
 describe("web3 unit test", () => {
   const web3 = new Web3(NET.TEST)
@@ -34,10 +35,10 @@ describe("web3 unit test", () => {
         gasprice: '100',
         sender: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
       },
-      'KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=',
+      new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
     )
     const txn = await web3.txn.getTxn(hash)
-    expect(txn.Result.Hash).toEqual(hash)
+    expect(txn.Hash).toEqual(hash)
   })
 
   it('should get estimated fee', async () => {
@@ -65,5 +66,17 @@ describe("web3 unit test", () => {
   it('extract publicKey', () => {
     const pk = utils.extractPublicKey('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420')
     expect(pk).toEqual('QZYSDAPQK4Q3442FX59Y2AJNSBX5MAZ3D6JAPB7JNGJRQQ5XQDDG')
+  })
+
+  it('address to shard', () => {
+    const shardIndex = utils.addressToShard('jrrvex9k5k8pqfghkxrspwxj3965xew0108jzqkybktc9qk85r2h7ycs68:ed25519')
+    expect(shardIndex).toEqual(0)
+  })
+
+  it('generateAddress with shardIndex', async () => {
+    const targetShardIndex = 2
+    const { address } = await utils.generateAddress(targetShardIndex)
+    const shardIndex = utils.addressToShard(address)
+    expect(shardIndex).toEqual(targetShardIndex)
   })
 })

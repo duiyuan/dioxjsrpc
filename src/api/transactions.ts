@@ -1,5 +1,5 @@
 import provider from './provider'
-import Request from './request'
+import Request, { DIOX } from './request'
 
 export function getComposeUrl() {
   const { rpc } = provider.get()
@@ -15,6 +15,11 @@ export function getSendUrl() {
   const { rpc } = provider.get()
   const encodeUri = encodeURI(rpc + '/api?req=tx.send')
   return encodeUri
+}
+
+export interface TxDetailResponse {
+  Hash: string
+  Content: DIOX.TxDetail
 }
 
 class TransactionService extends Request {
@@ -35,7 +40,7 @@ class TransactionService extends Request {
   }
 
   async getTransactionByHash(hash: string) {
-    const { Status, Message, Result } = await this.get<CommonResponse<any>>(
+    const { Status, Message, Result } = await this.get<CommonResponse<TxDetailResponse>>(
       '',
       {
         data: {
