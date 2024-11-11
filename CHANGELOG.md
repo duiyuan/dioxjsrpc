@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/duiyuan/web3/compare/v0.0.4...v0.0.5) (2024-11-11)
+
+
+### Features
+
+* add gasprice, sendWithRaw & update send & sign ([5e67267](https://github.com/duiyuan/web3/commit/5e6726793a91b06d831cb552faf0a153e4702eaf))
+* update compose sign send senWithRaw ([026d7ca](https://github.com/duiyuan/web3/commit/026d7cafb92421e72cb8adf75eb7e4c1a9879c34))
+* update getisn from rpc ([8df174d](https://github.com/duiyuan/web3/commit/8df174dc9a12d387dd637110de6340dc73a43b4e))
+* update readme & getaddresstokens ([7e09951](https://github.com/duiyuan/web3/commit/7e09951e1313bb2afd617e9e92878c6f14467dee))
+* update sign add types ([1b05960](https://github.com/duiyuan/web3/commit/1b05960b5a5254d7e1dac3c179f55e718083e119))
+* update unit test ([d6f701e](https://github.com/duiyuan/web3/commit/d6f701e77897ee317ac13071495ed0370c4f5271))
+* utils.addressToShard ([a84c3a5](https://github.com/duiyuan/web3/commit/a84c3a56a65d2647f1ccab725b1bbadf6e7f8583))
+* utils.generaterAddress ([82cf3cb](https://github.com/duiyuan/web3/commit/82cf3cb6203eef5a1c5cf927bcd8bddf95e6cfcd))
+
 ### [0.0.4](https://github.com/duiyuan/web3/compare/v0.0.3...v0.0.4) (2024-11-06)
 
 
