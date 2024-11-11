@@ -1,5 +1,5 @@
 # @dioxide-js/web3.js
-@dioxide-js/web3.js is a TypeScript implementation of the [Dioxide RPC API](https://docs.dioxide.network/doc/RPC) and [Dioxide Service AI](https://docs.dioxide.network/doc/Dioscan%20Service%20API/)
+@dioxide-js/web3.js is a Nodejs SDK implementation of the [Dioxide RPC API](https://docs.dioxide.network/doc/RPC) and [Dioxide Service AI](https://docs.dioxide.network/doc/Dioscan%20Service%20API/)
 
 ## Installation
 
@@ -35,6 +35,11 @@ console.log(balance);
 ```
 const balance = await web3.addr.getBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
 --->  '1000000000000000000000'
+```
+#### web3.addr.getISN(address: string)
+```
+const isn = await web3.addr.getISN('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+--->  1
 ```
 #### web3.addr.getAddressTokens(address: string)
 ```
@@ -79,26 +84,99 @@ const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5a
   }
 }
 ```
-#### web3.addr.getISN(address: string)
+#### web3.addr.getTxnListByAddress(address: string)
 ```
-const isn = await web3.addr.getISN('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
---->  1
+const txnList = await web3.addr.getTxnListByAddress('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+--->  {
+  TotalNum: 404,
+  ListData: DIOX.TxSummary[]
+}
 ```
 
 ### web3.txn
-#### web3.txn.compose(originalTxn: OriginalTxn): 
-#### web3.txn.sign(txdata: string, secretKey: string): 
+#### web3.txn.sign(txdata: OriginalTxn, secretKey: string)
+```
+const txn = await web3.txn.sign(
+  {
+    sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
+    gasprice: 100,
+    function: 'core.wallet.transfer',
+    args: {
+      Amount: '10000000000',
+      To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+      TokenId: 'GXX',
+    },
+  },
+  secretKeyArray,
+)
+---> {
+  rawTxData: base64rawdata,
+  hash: 'wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10'
+}
+```
 #### web3.txn.send(originalTxn: OriginalTxn, secretKey: string)
+```
+const txHash = await web3.txn.send(
+  {
+    sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
+    gasprice: 100,
+    function: 'core.wallet.transfer',
+    args: {
+      Amount: '10000000000',
+      To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+      TokenId: 'GXX',
+    },
+  },
+  secretKeyArray,
+)
+---> wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10
+```
 #### web3.txn.getTxn(hash: string)
+```
+const txn = await web3.txn.getTxn('wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10')
+---> DIOX.TxDetail
+```
 #### web3.txn.getEstimatedFee(originTxn: OriginalTxn)
-
+```
+const txn = await web3.txn.getEstimatedFee({
+    sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
+    gasprice: 100,
+    function: 'core.wallet.transfer',
+    args: {
+      Amount: '10000000000',
+      To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+      TokenId: 'GXX',
+    },
+  })
+---> 95500
+```
+#### web3.txn.sendRawTx(rawTxData: string)
+```
+const txnHash = await web3.txn.sendRawTx(base64rawData)
+---> txnHash
+```
 ### utils
 
 #### utils.toTokenAmount(amount: string, decimals: number)
+```
+const isValid = utils.toTokenAmount('100000000', 8)
+---> 1
+```
 #### utils.isValidAddress(address: string)
+```
+const isValid = utils.isValidAddress('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420', 0)
+---> true
+```
 #### utils.extractPublicKey(address: string)
-
-### type
+```
+const shardIndex = utils.extractPublicKey('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420', 0)
+---> Unit8Array
+```
+#### utils.addressToShard(address: string, shardOrder?: number)
+```
+const shardIndex = utils.addressToShard('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420', 0)
+---> 0
+```
 
 ## Package.json Scripts
 

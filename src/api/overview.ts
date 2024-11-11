@@ -1,4 +1,5 @@
 import Request from './request'
+import { DioxScanChainBasicInfo } from './type'
 
 class OverviewService extends Request {
   async chainStatus() {

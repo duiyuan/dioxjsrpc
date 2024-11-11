@@ -35,7 +35,9 @@ class Transaction {
     const unit8ArraySecrectKey = secretKey
     const txdata = await this.compose(originalTxn)
     const pk = extractPublicKey(originalTxn.sender)
-    if (!pk) { throw new Error('pk error') }
+    if (!pk) {
+      throw new Error('pk error')
+    }
     const dataWithPK = this.insertPK(txdata, [
       { encryptedMethodOrderNumber: 0x3, publicKey: new Uint8Array(pk) },
     ])

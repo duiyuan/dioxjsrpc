@@ -22,6 +22,9 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'no-constant-condition': 'off',
     quotes: [
       'error',
       'single',

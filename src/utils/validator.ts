@@ -1,5 +1,5 @@
-import base32Decode from "base32-decode"
-import base32Encode from "base32-encode"
+import base32Decode from 'base32-decode'
+import base32Encode from 'base32-encode'
 import crc32c from 'crc-32/crc32c'
 import { concat } from './buffer'
 

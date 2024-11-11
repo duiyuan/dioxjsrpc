@@ -19,7 +19,7 @@ class PowDifficulty {
     this.powData = sha512.arrayBuffer(this.originTxn)
   }
 
-  public LeadingZeroBits(x: BigInt) {
+  public LeadingZeroBits(x: bigint) {
     let binaryString = x.toString(2)
     let number = 0
     while (binaryString.length < 64) {
@@ -73,7 +73,7 @@ class PowDifficulty {
     // set diffculty
     this.Set(
       (1000 + (this.originTxn.byteLength + NONCE_LEN) * (this.ttl * 10 + 100)) /
-      3,
+        3,
     )
     // loop nonce
     const nonces: number[] = []

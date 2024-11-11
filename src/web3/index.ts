@@ -5,7 +5,6 @@ import provider from '../api/provider'
 import Blocks from '../api/block'
 import Overview from '../api/overview'
 
-
 class Web3 {
   private net: Provider
 
@@ -27,7 +26,8 @@ class Web3 {
   }
 
   setProvider(net: Provider) {
-    provider.set(this.net)
+    this.net = net
+    provider.set(net)
   }
 }
 

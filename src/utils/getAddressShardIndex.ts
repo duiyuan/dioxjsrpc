@@ -1,4 +1,4 @@
-import base32Decode from "base32-decode";
+import base32Decode from 'base32-decode'
 
 /**
  * address to shard
@@ -8,7 +8,9 @@ import base32Decode from "base32-decode";
  */
 export const addressToShard = (address: string, shardOrder = 2): number => {
   const addressStr = address.split(':')[0]
-  if (!addressStr) { throw new Error("Invalid address format") }
+  if (!addressStr) {
+    throw new Error('Invalid address format')
+  }
   const unit8Array = new Uint8Array(base32Decode(addressStr, 'Crockford'))
   const decoded = String.fromCharCode.apply(null, [...unit8Array])
   if (!decoded || decoded.length != 36) throw 'invalid address format'

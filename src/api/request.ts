@@ -4,8 +4,6 @@ import fetch, { Response, RequestInit } from 'node-fetch'
 import { shakeKeyValue } from '../utils/string'
 import provider from './provider'
 
-
-
 function checkStatus(response: Response) {
   if (response.ok) {
     return response
@@ -18,7 +16,7 @@ export default class Fetcher {
   prune = (url: string) => (url.endsWith('/') ? url.slice(0, -1) : url)
 
   get<T>(service: string, options: any): Promise<T> {
-    return new Promise(async (res) => {
+    return new Promise((res) => {
       const { dioxide } = provider.get()
       options = { credentials: 'omit', ...options }
 
@@ -36,7 +34,7 @@ export default class Fetcher {
   }
 
   post<T>(service: string, options: RequestInit = {}): Promise<T> {
-    return new Promise(async (res) => {
+    return new Promise((res) => {
       const { dioxide } = provider.get()
       const { body } = options
       const concatOption: RequestInit = {

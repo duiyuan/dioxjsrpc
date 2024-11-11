@@ -30,7 +30,7 @@ export function uint8ArrayToString(content: Uint8Array) {
 
 export function areUint8ArraysEqual(arr1: Uint8Array, arr2: Uint8Array) {
   if (arr1.length !== arr2.length) {
-    return false;
+    return false
   }
   for (let i = 0; i < arr1.length; i++) {
     if (arr1[i] !== arr2[i]) {
