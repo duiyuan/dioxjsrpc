@@ -37,14 +37,19 @@ class Transaction {
       { encryptedMethodOrderNumber: 0x3, publicKey: pk },
     ])
     const signedInfo = await ed.sign(dataWithPK, unit8ArraySecrectKey)
-    const isValid = await ed.verify(signedInfo, dataWithPK, pk);
-    if (!isValid) { throw new Error('sign error') }
+    const isValid = await ed.verify(signedInfo, dataWithPK, pk)
+    if (!isValid) {
+      throw new Error('sign error')
+    }
     const finalInfo = concat(dataWithPK, signedInfo)
     const powDiff = new PowDifficulty(finalInfo.buffer)
     const finalInfowithNonce = powDiff.getHashMixinNonnce()
     return {
       rawTxData: encode(finalInfowithNonce),
-      hash: base32Encode(sha256.arrayBuffer(finalInfowithNonce), "Crockford"),
+      hash: base32Encode(
+        sha256.arrayBuffer(finalInfowithNonce),
+        'Crockford',
+      ).toLowerCase(),
     }
   }
 
