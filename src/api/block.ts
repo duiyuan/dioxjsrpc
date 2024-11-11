@@ -1,4 +1,5 @@
-import Request, { DIOX } from './request'
+import Request from './request'
+import { DIOX } from './type'
 
 class BlockSvc extends Request {
   async getExcutedTx(params: {

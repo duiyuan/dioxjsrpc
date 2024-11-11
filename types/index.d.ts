@@ -31,14 +31,6 @@ interface AddrBaseInfo {
     Metadata: DIOX.MetaData
   }
 }
-interface AddrBalance {
-  Address: string
-  Height: 49
-  State: {
-    Balance: string
-  }
-  Wallet: { symbol: string; amount: string }[]
-}
 
 interface Blocks {
   TotalNum: number
@@ -58,14 +50,3 @@ type Override = CommonResponse<{
   Height: number
   NextISN: number
 }>
-
-interface OriginalTxn {
-  gasprice: string
-  sender: string
-  function: string
-  args: KeyValue
-  delegatee?: string
-  gaslimit?: string
-  tokens?: string[]
-  scale?: number
-}

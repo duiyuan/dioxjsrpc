@@ -1,4 +1,6 @@
 const { Web3, utils, NET } = require('../../lib/commonjs')
+const { decode } = require('base64-arraybuffer')
+const base32Encode = require("base32-encode")
 
 describe("web3 unit test", () => {
   const web3 = new Web3(NET.TEST)
@@ -15,18 +17,23 @@ describe("web3 unit test", () => {
     expect(info.Name).toEqual('forTest')
   })
 
-  it('compose get raw data', async () => {
+  it('get address ISN', async () => {
+    const isn = await web3.addr.getISN('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+    expect(isn).toBeNumber
+  })
+
+  it('sign data', async () => {
     const raw = await web3.txn
-      .compose({
+      .sign({
         args: { Amount: '200000000', To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519' },
         function: 'core.coin.transfer',
         gasprice: '100',
         sender: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
-      })
+      }, new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')))
     expect(raw).not.toBeNull()
   })
 
-  it('send txn and get txn hash', async () => {
+  it('sign data & send txn & get txn hash', async () => {
     const hash = await web3.txn.send(
       {
         args: { Amount: '200000000', To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519' },
@@ -34,10 +41,10 @@ describe("web3 unit test", () => {
         gasprice: '100',
         sender: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
       },
-      'KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=',
+      new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
     )
     const txn = await web3.txn.getTxn(hash)
-    expect(txn.Result.Hash).toEqual(hash)
+    expect(txn.Input.To).toEqual('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519')
   })
 
   it('should get estimated fee', async () => {
@@ -64,6 +71,18 @@ describe("web3 unit test", () => {
 
   it('extract publicKey', () => {
     const pk = utils.extractPublicKey('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420')
-    expect(pk).toEqual('QZYSDAPQK4Q3442FX59Y2AJNSBX5MAZ3D6JAPB7JNGJRQQ5XQDDG')
+    expect(base32Encode(pk, 'Crockford')).toEqual('QZYSDAPQK4Q3442FX59Y2AJNSBX5MAZ3D6JAPB7JNGJRQQ5XQDDG')
+  })
+
+  it('address to shard', () => {
+    const shardIndex = utils.addressToShard('jrrvex9k5k8pqfghkxrspwxj3965xew0108jzqkybktc9qk85r2h7ycs68:ed25519')
+    expect(shardIndex).toEqual(0)
+  })
+
+  it('generateAddress with shardIndex', async () => {
+    const targetShardIndex = 2
+    const { address } = await utils.generateAddress(targetShardIndex)
+    const shardIndex = utils.addressToShard(address)
+    expect(shardIndex).toEqual(targetShardIndex)
   })
 })

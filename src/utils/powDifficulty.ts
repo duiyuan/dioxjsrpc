@@ -73,7 +73,7 @@ class PowDifficulty {
     // set diffculty
     this.Set(
       (1000 + (this.originTxn.byteLength + NONCE_LEN) * (this.ttl * 10 + 100)) /
-        3,
+      3,
     )
     // loop nonce
     const nonces: number[] = []

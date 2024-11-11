@@ -1,6 +1,6 @@
 import provider from './provider'
 import Request from './request'
-
+import { TxDetailResponse } from './type'
 
 export function getComposeUrl() {
   const { rpc } = provider.get()
@@ -19,7 +19,6 @@ export function getSendUrl() {
 }
 
 class TransactionService extends Request {
-
   compose(body: string) {
     return this.post<{
       err?: number
@@ -36,14 +35,19 @@ class TransactionService extends Request {
     }>(getSendUrl(), { body })
   }
 
-  getTransactionByHash(hash: string) {
-    return this.get<DioxScanTxResponse>('', {
-      data: {
-        module: 'txn',
-        action: 'details',
-        hash,
+  async getTransactionByHash(hash: string) {
+    const { Status, Message, Result } = await this.get<CommonResponse<TxDetailResponse>>(
+      '',
+      {
+        data: {
+          module: 'txn',
+          action: 'details',
+          hash,
+        },
       },
-    })
+    )
+    if (Status) throw Message
+    return Result?.Content
   }
 }
 

@@ -1,9 +1,13 @@
 import { decode, encode } from 'base64-arraybuffer'
 import TransactionService from '../api/transactions'
 import { concat } from '../utils'
+import { extractPublicKey } from '../utils'
 import PowDifficulty from '../utils/powDifficulty'
 import * as ed from '@noble/ed25519'
 import OverviewService from '../api/overview'
+import { sha256 } from 'js-sha256'
+import base32Encode from 'base32-encode'
+import { OriginalTxn } from '../api/type'
 
 class Transaction {
   private txnServices: TransactionService
@@ -17,7 +21,7 @@ class Transaction {
     return this.txnServices.getTransactionByHash(hash)
   }
 
-  async compose(originalTxn: OriginalTxn) {
+  private async compose(originalTxn: OriginalTxn) {
     const { ret, err } = await this.txnServices.compose(
       JSON.stringify(originalTxn),
     )
@@ -27,26 +31,48 @@ class Transaction {
     return ret.TxData
   }
 
-  async sign(txdata: string, secretKey: string) {
-    const unit8ArraySecrectKey = new Uint8Array(decode(secretKey))
-    const pk = await ed.getPublicKey(unit8ArraySecrectKey)
+  async sign(originalTxn: OriginalTxn, secretKey: Uint8Array) {
+    const unit8ArraySecrectKey = secretKey
+    const txdata = await this.compose(originalTxn)
+    const pk = extractPublicKey(originalTxn.sender)
+    if (!pk) { throw new Error('pk error') }
     const dataWithPK = this.insertPK(txdata, [
-      { encryptedMethodOrderNumber: 0x3, publicKey: pk },
+      { encryptedMethodOrderNumber: 0x3, publicKey: new Uint8Array(pk) },
     ])
     const signedInfo = await ed.sign(dataWithPK, unit8ArraySecrectKey)
+    const isValid = await ed.verify(signedInfo, dataWithPK, pk)
+    if (!isValid) {
+      throw new Error('sign error')
+    }
     const finalInfo = concat(dataWithPK, signedInfo)
     const powDiff = new PowDifficulty(finalInfo.buffer)
     const finalInfowithNonce = powDiff.getHashMixinNonnce()
-    return finalInfowithNonce
+    return {
+      rawTxData: encode(finalInfowithNonce),
+      hash: base32Encode(
+        sha256.arrayBuffer(finalInfowithNonce),
+        'Crockford',
+      ).toLowerCase(),
+    }
   }
 
-  async send(originTxn: OriginalTxn, secretKey: string) {
-    const txData = await this.compose(originTxn)
-    const signData = await this.sign(txData, secretKey)
+  async send(originTxn: OriginalTxn, secretKey: Uint8Array) {
+    const { rawTxData: signData } = await this.sign(originTxn, secretKey)
     const { ret, err } = await this.txnServices.sendTransaction(
       JSON.stringify({
-        txdata: encode(signData),
-        address: originTxn.sender,
+        txdata: signData,
+      }),
+    )
+    if (err) {
+      throw new Error(ret.toString())
+    }
+    return ret.Hash
+  }
+
+  async sendRawTx(rawTxData: string) {
+    const { ret, err } = await this.txnServices.sendTransaction(
+      JSON.stringify({
+        txdata: rawTxData,
       }),
     )
     if (err) {

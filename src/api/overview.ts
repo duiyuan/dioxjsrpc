@@ -12,6 +12,11 @@ class OverviewService extends Request {
     if (Status) throw Message
     return Result
   }
+
+  async getGasPrice() {
+    const Result = await this.chainStatus()
+    return Result?.AvgGasPrice || 0
+  }
 }
 
 export default OverviewService

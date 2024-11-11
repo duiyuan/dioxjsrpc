@@ -32,8 +32,58 @@ console.log(balance);
 ### web3.addr
 
 #### web3.addr.getBalance(address: string)
+```
+const balance = await web3.addr.getBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+--->  '1000000000000000000000'
+```
 #### web3.addr.getAddressTokens(address: string)
+```
+const tokens = await web3.addr.getAddressTokens('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+--->  [{
+  TokenID: '5789767',
+  Address: 'GXX:token',
+  Symbol: 'GXX',
+  TokenState: 0,
+  Decimals: 8,
+  Amount: '3018154202998548',
+  StateHeight: 294558
+}]
+```
+#### web3.addr.getAddressTokenBalance(address: string, token: string)
+```
+const tokenbalance = await web3.addr.getAddressTokenBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm', 'FXX')
+--->  '1000000000000000000000'
+```
 #### web3.addr.getAddressInfo(address: string)
+```
+const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+--->  {
+  Address: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
+  ShardOrder: 2,
+  ShardIndex: 2,
+  State: {
+    Metadata: {
+      Name: 'address Name',
+      Description: 'address Description',
+      IconUrl: 'address Icon'
+      Website: 'https://address.website.com',
+      Social: {
+        Github: string
+        Discord: string
+        Twitter: string
+        Telegram: string
+        Facebook: string
+        Email: string
+      }
+    }
+  }
+}
+```
+#### web3.addr.getISN(address: string)
+```
+const isn = await web3.addr.getISN('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+--->  1
+```
 
 ### web3.txn
 #### web3.txn.compose(originalTxn: OriginalTxn): 
