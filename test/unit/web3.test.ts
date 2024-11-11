@@ -17,6 +17,11 @@ describe("web3 unit test", () => {
     expect(info.Name).toEqual('forTest')
   })
 
+  it('get address ISN', async () => {
+    const isn = await web3.addr.getISN('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+    expect(isn).toBeNumber
+  })
+
   it('sign data', async () => {
     const raw = await web3.txn
       .sign({
@@ -39,7 +44,6 @@ describe("web3 unit test", () => {
       new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
     )
     const txn = await web3.txn.getTxn(hash)
-    console.log(txn)
     expect(txn.Input.To).toEqual('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519')
   })
 

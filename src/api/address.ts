@@ -2,6 +2,7 @@ import { getDefaultToken } from '../constants'
 import { fullAddress, isValidAddress } from '../utils'
 import Request from './request'
 import { AddrBalance, DIOX } from './type'
+import provider from './provider'
 
 type ListParmas = {
   address?: string
@@ -12,6 +13,12 @@ type ListParmas = {
   limit?: number
 }
 
+export function getISNUrl() {
+  const { rpc } = provider.get()
+  const encodeUri = encodeURI(rpc + '/api?req=dx.isn')
+  return encodeUri
+}
+
 class AddressService extends Request {
   private checkAddress(address: string) {
     if (!address || !isValidAddress(address)) {
@@ -20,15 +27,19 @@ class AddressService extends Request {
   }
 
   async getISN(address: string) {
-    const { Status, Message, Result } = await this.get<Override>('', {
-      data: {
-        module: 'address',
-        action: 'status',
-        address,
-      },
+    const fullAddr = fullAddress(address)
+    this.checkAddress(fullAddr)
+    const { err, ret } = await this.post<{
+      err?: number
+      rsp: string
+      ret: { ISN: number }
+    }>(getISNUrl(), {
+      body: JSON.stringify({
+        address: fullAddr
+      }),
     })
-    if (Status) throw Message
-    return Result?.NextISN || 0
+    if (err) throw err
+    return ret?.ISN || 0
   }
 
   getListByAddress(params?: ListParmas) {
