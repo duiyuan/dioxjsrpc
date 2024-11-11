@@ -1,5 +1,6 @@
 import provider from './provider'
-import Request, { DIOX } from './request'
+import Request from './request'
+import { TxDetailResponse } from './type'
 
 export function getComposeUrl() {
   const { rpc } = provider.get()
@@ -15,11 +16,6 @@ export function getSendUrl() {
   const { rpc } = provider.get()
   const encodeUri = encodeURI(rpc + '/api?req=tx.send')
   return encodeUri
-}
-
-export interface TxDetailResponse {
-  Hash: string
-  Content: DIOX.TxDetail
 }
 
 class TransactionService extends Request {
@@ -51,7 +47,7 @@ class TransactionService extends Request {
       },
     )
     if (Status) throw Message
-    return Result
+    return Result?.Content
   }
 }
 

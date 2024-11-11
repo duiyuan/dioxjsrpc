@@ -1,6 +1,7 @@
 import { getDefaultToken } from '../constants'
 import { fullAddress, isValidAddress } from '../utils'
-import Request, { AddrBalance, DIOX } from './request'
+import Request from './request'
+import { AddrBalance, DIOX } from './type'
 
 type ListParmas = {
   address?: string

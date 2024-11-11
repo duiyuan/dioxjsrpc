@@ -1,15 +1,15 @@
-import base32Encode from "base32-encode"
+// import base32Encode from "base32-encode"
 import base32Decode from "base32-decode"
 import crc32c from 'crc-32/crc32c'
 import { areUint8ArraysEqual, concat } from "./buffer";
 
-export function extractPublicKey(address: string) {
+export function extractPublicKey(address: string): Uint8Array | null {
   const [splitAddr] = address.split(':')
   const addressUintArr = new Uint8Array(base32Decode(splitAddr, 'Crockford'))
   const publicKey = addressUintArr.slice(0, 32)
   const checkAddrUintArr = PK2Addr(publicKey)
   if (areUint8ArraysEqual(addressUintArr, checkAddrUintArr)) {
-    return base32Encode(publicKey, 'Crockford')
+    return publicKey
   }
 
   return null

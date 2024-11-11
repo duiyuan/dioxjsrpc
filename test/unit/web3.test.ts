@@ -1,5 +1,6 @@
 const { Web3, utils, NET } = require('../../lib/commonjs')
 const { decode } = require('base64-arraybuffer')
+const base32Encode = require("base32-encode")
 
 describe("web3 unit test", () => {
   const web3 = new Web3(NET.TEST)
@@ -16,18 +17,18 @@ describe("web3 unit test", () => {
     expect(info.Name).toEqual('forTest')
   })
 
-  it('compose get raw data', async () => {
+  it('sign data', async () => {
     const raw = await web3.txn
-      .compose({
+      .sign({
         args: { Amount: '200000000', To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519' },
         function: 'core.coin.transfer',
         gasprice: '100',
         sender: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
-      })
+      }, new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')))
     expect(raw).not.toBeNull()
   })
 
-  it('send txn and get txn hash', async () => {
+  it('sign data & send txn & get txn hash', async () => {
     const hash = await web3.txn.send(
       {
         args: { Amount: '200000000', To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519' },
@@ -38,7 +39,8 @@ describe("web3 unit test", () => {
       new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
     )
     const txn = await web3.txn.getTxn(hash)
-    expect(txn.Hash).toEqual(hash)
+    console.log(txn)
+    expect(txn.Input.To).toEqual('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519')
   })
 
   it('should get estimated fee', async () => {
@@ -65,7 +67,7 @@ describe("web3 unit test", () => {
 
   it('extract publicKey', () => {
     const pk = utils.extractPublicKey('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420')
-    expect(pk).toEqual('QZYSDAPQK4Q3442FX59Y2AJNSBX5MAZ3D6JAPB7JNGJRQQ5XQDDG')
+    expect(base32Encode(pk, 'Crockford')).toEqual('QZYSDAPQK4Q3442FX59Y2AJNSBX5MAZ3D6JAPB7JNGJRQQ5XQDDG')
   })
 
   it('address to shard', () => {
