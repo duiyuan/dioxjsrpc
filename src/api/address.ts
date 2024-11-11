@@ -99,10 +99,10 @@ class AddressService extends Request {
     })
   }
 
-  getAddressTokens(address: string) {
+  async getAddressTokens(address: string) {
     const fullAddr = fullAddress(address)
     this.checkAddress(fullAddr)
-    return this.get<
+    const { Result } = await this.get<
       CommonResponse<{ TotalNum: number; ListData: TokenItem[] }>
     >('', {
       data: {
@@ -111,6 +111,7 @@ class AddressService extends Request {
         address: fullAddr.replace(/#/g, '%23'),
       },
     })
+    return Result?.ListData || []
   }
 
   async getAddressTokenBalance(
