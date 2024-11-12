@@ -49,12 +49,13 @@ class Transaction {
     const finalInfo = concat(dataWithPK, signedInfo)
     const powDiff = new PowDifficulty(finalInfo.buffer)
     const finalInfowithNonce = powDiff.getHashMixinNonnce()
+    const hash = base32Encode(
+      sha256.arrayBuffer(finalInfowithNonce),
+      'Crockford',
+    )
     return {
       rawTxData: encode(finalInfowithNonce),
-      hash: base32Encode(
-        sha256.arrayBuffer(finalInfowithNonce),
-        'Crockford',
-      ).toLowerCase(),
+      hash: hash.toLowerCase(),
     }
   }
 

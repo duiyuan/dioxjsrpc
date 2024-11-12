@@ -7,5 +7,5 @@ interface KeyValue<T = any> {
 interface CommonResponse<T> {
   Status: number
   Message: string
-  Result?: T
+  Result: T
 }

@@ -16,7 +16,7 @@ class OverviewService extends Request {
 
   async getGasPrice() {
     const Result = await this.chainStatus()
-    return Result?.AvgGasPrice || 0
+    return Result.AvgGasPrice || 0
   }
 }
 
