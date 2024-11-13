@@ -106,6 +106,8 @@ const txn = await web3.txn.sign(
       To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
       TokenId: 'GXX',
     },
+    ttl: '30',
+    tokens: [{'FXX': '10000000000'}]
   },
   secretKeyArray,
 )
@@ -126,6 +128,8 @@ const txHash = await web3.txn.send(
       To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
       TokenId: 'GXX',
     },
+    ttl: '30',
+    tokens: [{'FXX': '10000000000'}]
   },
   secretKeyArray,
 )
