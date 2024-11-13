@@ -1,4 +1,4 @@
-import { getProvider } from "../constants"
+import { getProvider } from '../constants'
 
 class SingleProvider {
   private dioxide: string
@@ -12,7 +12,7 @@ class SingleProvider {
   get() {
     return {
       dioxide: this.dioxide,
-      rpc: this.rpc
+      rpc: this.rpc,
     }
   }
 
@@ -21,7 +21,6 @@ class SingleProvider {
     this.dioxide = dioxide
     this.rpc = rpc
   }
-
 }
 
 export default new SingleProvider()

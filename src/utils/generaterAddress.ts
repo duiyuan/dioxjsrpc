@@ -30,13 +30,22 @@ class Address {
     const keyPair = await this.generatePairOfKey(this.salt)
     if (!keyPair) throw new Error('Invalid key received')
 
-    const address = this.generateAddress(keyPair[0], 3, 0x3, `${this.saltRef}`, this.alias)
+    const address = this.generateAddress(
+      keyPair[0],
+      3,
+      0x3,
+      `${this.saltRef}`,
+      this.alias,
+    )
     if (!address) throw new Error('Failed to generate')
 
     // address.concatedSK = encode(this.concat(keyPair[1], keyPair[0]))
     // console.log(address)
     return {
-      address: base32Encode(address.address, 'Crockford').toLocaleLowerCase() + ':' + address.encryptMethod,
+      address:
+        base32Encode(address.address, 'Crockford').toLocaleLowerCase() +
+        ':' +
+        address.encryptMethod,
       words: this.words,
     }
   }
@@ -4230,7 +4239,6 @@ const dictionary = [
   'zshops',
   'zurich',
 ]
-
 
 export async function generateAddress(shardIndex?: number) {
   const addressInstance = new Address()

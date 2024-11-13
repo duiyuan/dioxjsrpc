@@ -12,7 +12,6 @@ export enum DioFunction {
   MINT_NFT = 'nonfungible_init@address.delegation.core',
   MINTED = 'core.coin.global.minted',
   TRANSFER = 'core.coin.transfer',
-  TRANSFER_TOKEN_DIO = 'core.wallet.transfer',
   TRANSFER_NFT = 'transfer@address.vault.core',
   TRANSFER_TOKENS = 'core.wallet.transfer',
   RECEIVE_TOKENS = 'Asset.Wallet.address.deposit',

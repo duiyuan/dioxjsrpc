@@ -61,6 +61,57 @@ export declare namespace DIOX {
     ISN?: number
   }
 
+  interface Block {
+    Size: number
+    Scope: string
+    Throughput: number
+    Shard: [number, number]
+    Prev: string
+    BlockInterval: number
+    Consensus: number
+    ScheduledTxnCount: number
+    UserInitiatedTxnCount: number
+    IntraRelayTxnCount: number
+    InboundRelayTxnCount: number
+    OutboundRelayTxnCount: number
+    DeferredRelayTxnCount: number
+    DispatchedRelayTxnCount: number
+    ExecutionCount: number
+    MasterBlock: string
+    BlockMerkleLeaf: string
+    ConfirmedTxnHash: string
+    ConfirmedTxnMerkle: string
+    ConsensusHeaderHash?: string
+    ProcessedTxnMerkle: string
+    ChainStateMerkle: string
+    GlobalChainStateMerkle: string
+    GlobalProcessedTxnMerkle: string
+    GlobalTxnBlockMerkleLeaf: string
+    ShardOutboundRelayMerkle: string
+    ShardProcessedTxnMerkle: string
+    ShardTxnBlockMerkle: string
+    ShardOrder?: number
+    TotalGasFee: string
+    AvgGasPrice: string
+    Hash: string
+    Height: number
+    Timestamp: number
+    Miner: string
+    Stage: string
+    State: string
+    PowDifficulty: number
+    PowNonce: string
+    ScalingNext: boolean
+    Uncles: string[]
+    Transactions: {
+      Scheduled: string[]
+      Confirmed: string[]
+      DispatchRelays: string[]
+      Deferred: string[]
+    }
+    Snapshot?: string
+  }
+
   interface Invocation {
     Return: [number, number]
     Input: {
@@ -163,3 +214,43 @@ export interface TxDetailResponse {
   Hash: string
   Content: DIOX.TxDetail
 }
+
+export type DioxScanTxResponse = CommonResponse<{
+  TotalNum: number
+  ListData: DIOX.TxSummary[]
+}>
+
+export interface TokenItem {
+  Address?: string
+  TokenID: number
+  Amount?: string
+  Symbol: string
+  Height?: number
+  FutureMint?: number
+  Decimals: number
+  Balance?: number | string
+  Wallet?: { symbol: string; amount: string }[]
+  IconUrl?: string
+  Metadata?: DIOX.MetaData
+}
+
+export interface AddrBaseInfo {
+  Address: string
+  State: {
+    Metadata: DIOX.MetaData
+  }
+}
+
+export interface Blocks {
+  TotalNum: number
+  TxType: string
+  ListData: DIOX.Block[]
+}
+
+export type DioxScanChainBasicInfo = CommonResponse<DIOX.ChainStatus>
+
+export type Override = CommonResponse<{
+  Address: string
+  Height: number
+  NextISN: number
+}>

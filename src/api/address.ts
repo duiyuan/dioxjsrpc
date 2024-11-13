@@ -1,7 +1,13 @@
 import { getDefaultToken } from '../constants'
 import { fullAddress, isValidAddress } from '../utils'
 import Request from './request'
-import { AddrBalance, DIOX } from './type'
+import {
+  AddrBalance,
+  AddrBaseInfo,
+  DIOX,
+  DioxScanTxResponse,
+  TokenItem,
+} from './type'
 import provider from './provider'
 
 type ListParmas = {
@@ -35,21 +41,21 @@ class AddressService extends Request {
       ret: { ISN: number }
     }>(getISNUrl(), {
       body: JSON.stringify({
-        address: fullAddr
+        address: fullAddr,
       }),
     })
     if (err) throw err
     return ret?.ISN || 0
   }
 
-  getListByAddress(params?: ListParmas) {
+  getTxnListByAddress(params?: ListParmas) {
     return this.get<DioxScanTxResponse>('', {
       data: {
         module: 'address',
         action: 'listtxn',
         ...params,
       },
-    })
+    }).then(res => res.Result)
   }
 
   getAddressInfo(address: string) {
@@ -62,7 +68,7 @@ class AddressService extends Request {
       },
     })
       .then((res) => res.Result)
-      .catch((err) => ({}))
+      .catch(() => ({}))
   }
 
   getDetailInfo(address: string) {

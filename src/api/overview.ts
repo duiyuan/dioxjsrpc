@@ -1,4 +1,5 @@
 import Request from './request'
+import { DioxScanChainBasicInfo } from './type'
 
 class OverviewService extends Request {
   async chainStatus() {
@@ -15,7 +16,7 @@ class OverviewService extends Request {
 
   async getGasPrice() {
     const Result = await this.chainStatus()
-    return Result?.AvgGasPrice || 0
+    return Result.AvgGasPrice || 0
   }
 }
 

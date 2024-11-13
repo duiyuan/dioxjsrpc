@@ -36,16 +36,15 @@ class TransactionService extends Request {
   }
 
   async getTransactionByHash(hash: string) {
-    const { Status, Message, Result } = await this.get<CommonResponse<TxDetailResponse>>(
-      '',
-      {
-        data: {
-          module: 'txn',
-          action: 'details',
-          hash,
-        },
+    const { Status, Message, Result } = await this.get<
+      CommonResponse<TxDetailResponse>
+    >('', {
+      data: {
+        module: 'txn',
+        action: 'details',
+        hash,
       },
-    )
+    })
     if (Status) throw Message
     return Result?.Content
   }

@@ -19,7 +19,7 @@ export const bignumberMult = (val1: number | string, val2: BigNumber.Value) => {
 
 export const bignumberMinus = (
   val1: BigNumber.Value,
-  val2: BigNumber.Value
+  val2: BigNumber.Value,
 ) => {
   return new BigNumber(val1).minus(new BigNumber(val2))
 }
