@@ -31,6 +31,38 @@ export declare namespace DIOX {
     Func: string
   }
 
+  interface DepositTxSum {
+    Address: string
+    TokenSymbol: string
+    AcType: string
+    TokenAmount: string
+    Height: number
+    ShardIndex: number
+    ExecIndex: number
+    RelayGroupIndex: number
+    ShardOrder: number
+    BlockTime: number
+    TxnHash: string
+    TxnType: string
+    Initiator: string
+    Target: string
+    OriginalTxnHash: string
+    IsFinalized: 1
+    Func: string
+    Contract: string
+    Invocation: {
+      Input: {
+        [key: string]: any
+      }
+      GasFee: string
+      Return: [number, number]
+      GasPrice: string
+      GasOffered: number
+    }
+    Sort: number
+    TokenDecimals: number
+  }
+
   interface TxDetail {
     BlockTime: number
     Height: number

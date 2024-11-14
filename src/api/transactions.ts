@@ -1,6 +1,6 @@
 import provider from './provider'
 import Request from './request'
-import { TxDetailResponse } from './type'
+import { DIOX, TxDetailResponse } from './type'
 
 export function getComposeUrl() {
   const { rpc } = provider.get()
@@ -16,6 +16,12 @@ export function getSendUrl() {
   const { rpc } = provider.get()
   const encodeUri = encodeURI(rpc + '/api?req=tx.send')
   return encodeUri
+}
+
+export interface ExcutedTxCond {
+  height: number
+  limit?: number
+  pos?: number
 }
 
 class TransactionService extends Request {
@@ -47,6 +53,23 @@ class TransactionService extends Request {
     })
     if (Status) throw Message
     return Result?.Content
+  }
+
+  async getDepositTx(params: ExcutedTxCond): Promise<DIOX.DepositTxSum[]> {
+    const { limit = 500, pos = 0, height } = params
+    const data = {
+      limit,
+      pos,
+      height,
+      module: 'txn',
+      action: 'deposit',
+    }
+    const resp = await this.get<CommonResponse<DIOX.DepositTxSum[]>>('', {
+      data,
+    })
+    const { Status, Message, Result } = resp
+    if (Status) throw Message
+    return Result
   }
 }
 
