@@ -148,6 +148,37 @@ class Transaction {
   getDepositTxByBlock(params: ExcutedTxCond) {
     return this.txnServices.getDepositTx(params)
   }
+
+  // async reclaimWallet({
+  //   refund,
+  //   residual = false,
+  //   residualToken = 'XXX',
+  //   secretKeyArray,
+  // }: {
+  //   refund: boolean
+  //   residual?: boolean
+  //   residualToken?: string
+  //   secretKeyArray: Uint8Array
+  // }) {
+  //   const pk = await ed.getPublicKey(secretKeyArray)
+  //   const { address } = pk2Address(pk)
+  //   const sender = fullAddress(
+  //     base32Encode(address, 'Crockford').toLocaleLowerCase(),
+  //   )
+  //   return this.send(
+  //     {
+  //       sender,
+  //       gasprice: 100,
+  //       function: 'core.wallet.reclaim',
+  //       args: {
+  //         Refund: refund,
+  //         Residual: residual,
+  //         Token: residualToken,
+  //       },
+  //     },
+  //     secretKeyArray,
+  //   )
+  // }
 }
 
 export { Transaction }

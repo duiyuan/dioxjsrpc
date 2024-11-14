@@ -11,7 +11,7 @@ export interface IaddressDetails {
   address: Uint8Array
   encryptMethod: string
   encryptMethodOrderNumber: number
-  salt: string
+  salt: number
   alias?: string
 }
 
@@ -30,13 +30,7 @@ class Address {
     const keyPair = await this.generatePairOfKey(this.salt)
     if (!keyPair) throw new Error('Invalid key received')
 
-    const address = this.generateAddress(
-      keyPair[0],
-      3,
-      0x3,
-      `${this.saltRef}`,
-      this.alias,
-    )
+    const address = pk2Address(keyPair[0])
     if (!address) throw new Error('Failed to generate')
 
     // address.concatedSK = encode(this.concat(keyPair[1], keyPair[0]))
@@ -97,33 +91,6 @@ class Address {
     } catch (e) {
       return []
     }
-  }
-
-  generateAddress(
-    publicKey: Uint8Array,
-    rollingCRC: number,
-    encryptMethod: number,
-    salt: string,
-    alias?: string,
-  ): IaddressDetails {
-    let errorCorrectingCode = crc32c.buf(publicKey, rollingCRC)
-    errorCorrectingCode = (errorCorrectingCode & 0xfffffff0) | encryptMethod
-    errorCorrectingCode = errorCorrectingCode >>> 0
-
-    const buffer = new Int32Array([errorCorrectingCode]).buffer
-    const errorCorrectingCodeBuffer = new Uint8Array(buffer)
-
-    const mergedBuffer = concat(publicKey, errorCorrectingCodeBuffer)
-    // console.log(mergedBuffer)
-    const address = {
-      currency: 'BRX',
-      address: mergedBuffer,
-      encryptMethod: 'ed25519',
-      encryptMethodOrderNumber: encryptMethod,
-      salt: salt,
-      alias: alias || `Address${salt}`,
-    }
-    return address
   }
 
   formatedSalt(salt: number) {
@@ -4248,6 +4215,33 @@ export async function generateAddress(shardIndex?: number) {
     if (targetShardIndex !== shardIndex) {
       return generateAddress(shardIndex)
     }
+  }
+  return address
+}
+
+export function pk2Address(
+  publicKey: Uint8Array,
+  rollingCRC: number = 3,
+  encryptMethod: number = 0x3,
+  salt: number = 1,
+  alias?: string,
+): IaddressDetails {
+  let errorCorrectingCode = crc32c.buf(publicKey, rollingCRC)
+  errorCorrectingCode = (errorCorrectingCode & 0xfffffff0) | encryptMethod
+  errorCorrectingCode = errorCorrectingCode >>> 0
+
+  const buffer = new Int32Array([errorCorrectingCode]).buffer
+  const errorCorrectingCodeBuffer = new Uint8Array(buffer)
+
+  const mergedBuffer = concat(publicKey, errorCorrectingCodeBuffer)
+  // console.log(mergedBuffer)
+  const address = {
+    currency: 'DIO',
+    address: mergedBuffer,
+    encryptMethod: 'ed25519',
+    encryptMethodOrderNumber: encryptMethod,
+    salt: salt || 1,
+    alias: alias || `Address${salt}`,
   }
   return address
 }

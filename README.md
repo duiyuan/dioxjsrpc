@@ -59,7 +59,7 @@ const tokens = await web3.addr.getAddressTokens('eqfkk71rg18mcjcp63tkcz4xpcxd91w
 const tokenbalance = await web3.addr.getAddressTokenBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm', 'FXX')
 // '1000000000000000000000'
 ```
-#### web3.addr.getAddressInfo(address: string): [DIOX.AddressBaseInfo](###DIOX.AddressBaseInfo)
+#### web3.addr.getAddressInfo(address: string): [DIOX.AddressBaseInfo](#dioxaddressbaseinfo)
 ```js
 const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
 {
@@ -84,7 +84,7 @@ const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5a
   }
 }
 ```
-#### web3.addr.getTxnListByAddress(address: string): [DIOX.TxSummary](###DIOX.TxSummary)[]
+#### web3.addr.getTxnListByAddress(address: string): [DIOX.TxSummary](#dioxtxsummary)[]
 ```js
 const txnList = await web3.addr.getTxnListByAddress('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
 {
@@ -94,7 +94,7 @@ const txnList = await web3.addr.getTxnListByAddress('eqfkk71rg18mcjcp63tkcz4xpcx
 ```
 
 ### web3.txn
-#### web3.txn.sign(txdata: [OriginalTxn](###OriginalTxn), secretKey: string)
+#### web3.txn.sign(txdata: [OriginalTxn](#originaltxn), secretKey: string)
 ```js
 const txn = await web3.txn.sign(
   {
@@ -116,7 +116,7 @@ const txn = await web3.txn.sign(
   hash: 'wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10'
 }
 ```
-#### web3.txn.send(originalTxn: [OriginalTxn](###OriginalTxn), secretKey: string)
+#### web3.txn.send(originalTxn: [OriginalTxn](#originaltxn), secretKey: string)
 ```js
 const txHash = await web3.txn.send(
   {
@@ -135,12 +135,12 @@ const txHash = await web3.txn.send(
 )
 //wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10
 ```
-#### web3.txn.getTxn(hash: string): [DIOX.TxDetail](###DIOX.TxDetail)
+#### web3.txn.getTxn(hash: string): [DIOX.TxDetail](#dioxtxdetail)
 ```js
 const txn = await web3.txn.getTxn('wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10')
 //DIOX.TxDetail
 ```
-#### web3.txn.getEstimatedFee(originTxn: [OriginalTxn](###OriginalTxn))
+#### web3.txn.getEstimatedFee(originTxn: [OriginalTxn](#originaltxn))
 ```js
 const txn = await web3.txn.getEstimatedFee({
     sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
@@ -159,6 +159,7 @@ const txn = await web3.txn.getEstimatedFee({
 const txnHash = await web3.txn.sendRawTx(base64rawData)
 //txnHash
 ```
+
 ### utils
 
 #### utils.toTokenAmount(amount: string, decimals: number)

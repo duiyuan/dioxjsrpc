@@ -19,9 +19,26 @@ type ListParmas = {
   limit?: number
 }
 
+// interface RefundItem {
+//   Shard: number
+//   Token: string
+//   Amount: string
+// }
+
 export function getISNUrl() {
   const { rpc } = provider.get()
   const encodeUri = encodeURI(rpc + '/api?req=dx.isn')
+  return encodeUri
+}
+
+export function getRefundUrl() {
+  const { rpc } = provider.get()
+  const encodeUri = encodeURI(rpc + '/api?req=dx.exotic_refund')
+  return encodeUri
+}
+export function getResidualUrl() {
+  const { rpc } = provider.get()
+  const encodeUri = encodeURI(rpc + '/api?req=dx.exotic_residual')
   return encodeUri
 }
 
@@ -31,6 +48,39 @@ class AddressService extends Request {
       throw new Error('Address is not valid')
     }
   }
+
+  // async getRefund(address: string) {
+  //   const fullAddr = fullAddress(address)
+  //   this.checkAddress(fullAddr)
+  //   const { err, ret } = await this.post<{
+  //     err?: number
+  //     rsp: string
+  //     ret: RefundItem[]
+  //   }>(getRefundUrl(), {
+  //     body: JSON.stringify({
+  //       address: fullAddr,
+  //     }),
+  //   })
+  //   if (err) throw err
+  //   return ret || []
+  // }
+
+  // async getResidualUrl(address: string, token: string) {
+  //   const fullAddr = fullAddress(address)
+  //   this.checkAddress(fullAddr)
+  //   const { err, ret } = await this.post<{
+  //     err?: number
+  //     rsp: string
+  //     ret: RefundItem[]
+  //   }>(getResidualUrl(), {
+  //     body: JSON.stringify({
+  //       address: fullAddr,
+  //       token,
+  //     }),
+  //   })
+  //   if (err) throw err
+  //   return ret || []
+  // }
 
   async getISN(address: string) {
     const fullAddr = fullAddress(address)
