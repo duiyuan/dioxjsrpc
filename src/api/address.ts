@@ -55,7 +55,7 @@ class AddressService extends Request {
         action: 'listtxn',
         ...params,
       },
-    }).then(res => res.Result)
+    }).then((res) => res.Result)
   }
 
   getAddressInfo(address: string) {
