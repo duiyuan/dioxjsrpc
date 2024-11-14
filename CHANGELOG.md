@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/duiyuan/web3/compare/v0.0.8...v0.0.9) (2024-11-14)
+
+
+### Features
+
+* add refund ([e39c7bd](https://github.com/duiyuan/web3/commit/e39c7bdc694b8b1ca11ff16ff695f328131f8c3e))
+* update docs ([e465139](https://github.com/duiyuan/web3/commit/e4651394357ce06718bbf34c7a56c2fe4062af94))
+
 ### [0.0.8](https://github.com/duiyuan/web3/compare/v0.0.7...v0.0.8) (2024-11-14)
 
 ### [0.0.7](https://github.com/duiyuan/web3/compare/v0.0.6...v0.0.7) (2024-11-14)
