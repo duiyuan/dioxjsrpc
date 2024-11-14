@@ -230,6 +230,7 @@ export interface OriginalTxn {
   delegatee?: string | number
   gaslimit?: string | number
   tokens?: { [key: string]: string }[]
+  ttl?: string | number
   scale?: number
 }
 
