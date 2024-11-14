@@ -17,7 +17,7 @@ yarn add @dioxide-js/web3.js
 
 ## Getting Started
 
-```typescript
+```js
 import { Web3, NET } from '@dioxide-js/web3.js';
 
 const web3 = new Web3(NET.TEST);
@@ -32,19 +32,19 @@ console.log(balance);
 ### web3.addr
 
 #### web3.addr.getBalance(address: string)
-```
+```js
 const balance = await web3.addr.getBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
---->  '1000000000000000000000'
+// '1000000000000000000000'
 ```
 #### web3.addr.getISN(address: string)
-```
+```js
 const isn = await web3.addr.getISN('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
---->  1
+// 1
 ```
 #### web3.addr.getAddressTokens(address: string)
-```
+```js
 const tokens = await web3.addr.getAddressTokens('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
---->  [{
+[{
   TokenID: '5789767',
   Address: 'GXX:token',
   Symbol: 'GXX',
@@ -55,14 +55,14 @@ const tokens = await web3.addr.getAddressTokens('eqfkk71rg18mcjcp63tkcz4xpcxd91w
 }]
 ```
 #### web3.addr.getAddressTokenBalance(address: string, token: string)
-```
+```js
 const tokenbalance = await web3.addr.getAddressTokenBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm', 'FXX')
---->  '1000000000000000000000'
+// '1000000000000000000000'
 ```
-#### web3.addr.getAddressInfo(address: string)
-```
+#### web3.addr.getAddressInfo(address: string): [DIOX.AddressBaseInfo](###DIOX.AddressBaseInfo)
+```js
 const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
---->  {
+{
   Address: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
   ShardOrder: 2,
   ShardIndex: 2,
@@ -84,18 +84,18 @@ const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5a
   }
 }
 ```
-#### web3.addr.getTxnListByAddress(address: string)
-```
+#### web3.addr.getTxnListByAddress(address: string): [DIOX.TxSummary](###DIOX.TxSummary)[]
+```js
 const txnList = await web3.addr.getTxnListByAddress('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
---->  {
+{
   TotalNum: 404,
   ListData: DIOX.TxSummary[]
 }
 ```
 
 ### web3.txn
-#### web3.txn.sign(txdata: OriginalTxn, secretKey: string)
-```
+#### web3.txn.sign(txdata: [OriginalTxn](###OriginalTxn), secretKey: string)
+```js
 const txn = await web3.txn.sign(
   {
     sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
@@ -111,13 +111,13 @@ const txn = await web3.txn.sign(
   },
   secretKeyArray,
 )
----> {
+{
   rawTxData: base64rawdata,
   hash: 'wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10'
 }
 ```
-#### web3.txn.send(originalTxn: OriginalTxn, secretKey: string)
-```
+#### web3.txn.send(originalTxn: [OriginalTxn](###OriginalTxn), secretKey: string)
+```js
 const txHash = await web3.txn.send(
   {
     sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
@@ -133,15 +133,15 @@ const txHash = await web3.txn.send(
   },
   secretKeyArray,
 )
----> wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10
+//wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10
 ```
-#### web3.txn.getTxn(hash: string)
-```
+#### web3.txn.getTxn(hash: string): [DIOX.TxDetail](###DIOX.TxDetail)
+```js
 const txn = await web3.txn.getTxn('wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10')
----> DIOX.TxDetail
+//DIOX.TxDetail
 ```
-#### web3.txn.getEstimatedFee(originTxn: OriginalTxn)
-```
+#### web3.txn.getEstimatedFee(originTxn: [OriginalTxn](###OriginalTxn))
+```js
 const txn = await web3.txn.getEstimatedFee({
     sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
     gasprice: 100,
@@ -152,34 +152,133 @@ const txn = await web3.txn.getEstimatedFee({
       TokenId: 'GXX',
     },
   })
----> 95500
+//95500
 ```
 #### web3.txn.sendRawTx(rawTxData: string)
-```
+```js
 const txnHash = await web3.txn.sendRawTx(base64rawData)
----> txnHash
+//txnHash
 ```
 ### utils
 
 #### utils.toTokenAmount(amount: string, decimals: number)
-```
+```js
 const isValid = utils.toTokenAmount('100000000', 8)
----> 1
+//1
 ```
 #### utils.isValidAddress(address: string)
-```
+```js
 const isValid = utils.isValidAddress('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420', 0)
----> true
+//true
 ```
 #### utils.extractPublicKey(address: string)
-```
+```js
 const shardIndex = utils.extractPublicKey('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420', 0)
----> Unit8Array
+//Unit8Array
 ```
 #### utils.addressToShard(address: string, shardOrder?: number)
-```
+```js
 const shardIndex = utils.addressToShard('qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420', 0)
----> 0
+//0
+```
+
+## types
+
+### DIOX.MetaData
+```js
+interface MetaData {
+    Description: string;
+    IconUrl: string;
+    Website: string;
+    Social: {
+        Github: string;
+        Discord: string;
+        Twitter: string;
+        Telegram: string;
+        Facebook: string;
+        Email: string;
+    };
+}
+```
+
+### DIOX.AddressBaseInfo
+```js
+interface AddrBaseInfo {
+    Address: string;
+    State: {
+        Metadata: DIOX.MetaData;
+    };
+}
+```
+
+### DIOX.TxSummary
+```js
+interface TxSummary {
+    Height: number;
+    ShardIndex: number;
+    ExecIndex: number;
+    RelayGroupIndex: number;
+    ShardOrder: number;
+    BlockTime: number;
+    TxnHash: string;
+    TxnType: string;
+    Initiator: string;
+    Target: string;
+    OriginalTxnHash: string;
+    Invocation: Invocation;
+    TxnTime: number;
+    Func: string;
+}
+```
+
+### DIOX.TxDetail
+```js
+interface TxDetail {
+    BlockTime: number;
+    Height: number;
+    Initiator: string;
+    Address: string;
+    BuildNum: number;
+    ConfirmedBy: string;
+    ConfirmState?: string;
+    ExecStage: string;
+    Function: string;
+    GasOffered: number;
+    GasPrice: string;
+    Grouped: false;
+    Hash: string;
+    Packing?: string;
+    Relays?: Array<TxDetail>;
+    Input: {
+        [key: string]: string | number;
+    };
+    Invocation: Invocation;
+    Mode: string;
+    OrigExecIdx: number;
+    OrigTxHash: string;
+    Shard: number[];
+    Size: number;
+    Signers?: string[];
+    Timestamp: number;
+    ISN?: number;
+}
+```
+
+### OriginalTxn
+```js
+interface OriginalTxn {
+    gasprice: string | number;
+    sender: string;
+    function: string;
+    args: KeyValue;
+    delegatee?: string | number;
+    gaslimit?: string | number;
+    tokens?: {
+        [key: string]: string;
+    }[];
+    ttl: string | number;
+    scale?: number;
+}
 ```
 
 ## Package.json Scripts
