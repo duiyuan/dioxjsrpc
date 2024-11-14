@@ -1,17 +1,19 @@
 import { decode, encode } from 'base64-arraybuffer'
-import TransactionService from '../api/transactions'
+import { sha256 } from 'js-sha256'
+import * as ed from '@noble/ed25519'
+import base32Encode from 'base32-encode'
+
+import TransactionService, { ExcutedTxCond } from '../api/transactions'
 import { concat } from '../utils'
 import { extractPublicKey } from '../utils'
 import PowDifficulty from '../utils/powDifficulty'
-import * as ed from '@noble/ed25519'
 import OverviewService from '../api/overview'
-import { sha256 } from 'js-sha256'
-import base32Encode from 'base32-encode'
 import { OriginalTxn } from '../api/type'
 
 class Transaction {
   private txnServices: TransactionService
   private overViewServices: OverviewService
+
   constructor() {
     this.txnServices = new TransactionService()
     this.overViewServices = new OverviewService()
@@ -141,6 +143,10 @@ class Transaction {
     const gasPrice = parseInt(((scale - 1) * 0.25 + 0.5) * average + '', 10)
     const gasFee = gasPrice * gasLimit
     return gasFee
+  }
+
+  getDepositTxByBlock(params: ExcutedTxCond) {
+    return this.txnServices.getDepositTx(params)
   }
 }
 
