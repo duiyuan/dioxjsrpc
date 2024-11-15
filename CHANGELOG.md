@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/duiyuan/web3/compare/v0.0.9...v0.0.10) (2024-11-15)
+
+
+### Features
+
+* add fetch timeout abort ([b4942aa](https://github.com/duiyuan/web3/commit/b4942aa1e41e330f46476c8682bd5c45731e0167))
+* add transfer & transferFCA ([c226936](https://github.com/duiyuan/web3/commit/c2269369e3ce08febee1dc84381bbb396e78baac))
+
 ### [0.0.9](https://github.com/duiyuan/web3/compare/v0.0.8...v0.0.9) (2024-11-14)
 
 
