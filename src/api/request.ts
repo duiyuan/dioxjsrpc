@@ -4,6 +4,8 @@ import fetch, { Response, RequestInit } from 'node-fetch'
 import { shakeKeyValue } from '../utils/string'
 import provider from './provider'
 
+const AbortController = globalThis.AbortController
+
 function checkStatus(response: Response) {
   if (response.ok) {
     return response
@@ -27,28 +29,46 @@ export default class Fetcher {
         absoluteUrl += '?' + querystring.stringify(data, { encode: false })
       }
 
+      const controller = new AbortController()
+      options.signal = controller.signal
+      const timeout = setTimeout(() => {
+        controller.abort()
+      }, 30000)
+
       fetch(absoluteUrl, options)
         .then(checkStatus)
         .then((r) => r.text().then((text) => res(json.parse(text))))
+        .finally(() => {
+          clearTimeout(timeout)
+        })
     })
   }
 
-  post<T>(service: string, options: RequestInit = {}): Promise<T> {
+  post<T>(service: string, options: any = {}): Promise<T> {
     return new Promise((res) => {
       const { dioxide } = provider.get()
       const { body } = options
-      const concatOption: RequestInit = {
-        ...options,
-        method: 'post',
-        body,
-      }
       const absoluteUrl = service.startsWith('http')
         ? service
         : dioxide + (service.startsWith('/') ? service.slice(1) : service)
 
+      const controller = new AbortController()
+      const concatOption: RequestInit = {
+        ...options,
+        method: 'post',
+        body,
+        signal: controller.signal,
+      }
+      const timeout = setTimeout(() => {
+        controller.abort()
+      }, 30000)
+
       fetch(absoluteUrl, concatOption)
         .then(checkStatus)
         .then((r) => r.json().then((json) => res(json as T)))
+        .finally(() => {
+          clearTimeout(timeout)
+        })
     })
   }
 }
