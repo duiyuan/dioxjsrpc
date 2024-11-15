@@ -4,7 +4,7 @@ import * as ed from '@noble/ed25519'
 import base32Encode from 'base32-encode'
 
 import TransactionService, { ExcutedTxCond } from '../api/transactions'
-import { concat } from '../utils'
+import { concat, fullAddress, pk2Address } from '../utils'
 import { extractPublicKey } from '../utils'
 import PowDifficulty from '../utils/powDifficulty'
 import OverviewService from '../api/overview'
@@ -179,6 +179,63 @@ class Transaction {
   //     secretKeyArray,
   //   )
   // }
+
+  async transfer({
+    to,
+    amount,
+    secretKey,
+  }: {
+    to: string
+    amount: string
+    secretKey: Uint8Array
+  }) {
+    const sender = await this.sk2base32Address(secretKey)
+    return this.send(
+      {
+        sender,
+        gasprice: 100,
+        function: 'core.coin.transfer',
+        args: {
+          To: to,
+          Amount: amount,
+        },
+      },
+      secretKey,
+    )
+  }
+
+  async transferFCA({
+    symbol,
+    to,
+    amount,
+    secretKey,
+  }: {
+    symbol: string
+    to: string
+    amount: string
+    secretKey: Uint8Array
+  }) {
+    const sender = await this.sk2base32Address(secretKey)
+    return this.send(
+      {
+        sender,
+        gasprice: 100,
+        function: 'core.wallet.transfer',
+        args: {
+          To: to,
+          Amount: amount,
+          TokenId: symbol,
+        },
+      },
+      secretKey,
+    )
+  }
+
+  private async sk2base32Address(sk: Uint8Array) {
+    const pk = await ed.getPublicKey(sk)
+    const { address } = pk2Address(pk)
+    return fullAddress(base32Encode(address, 'Crockford').toLocaleLowerCase())
+  }
 }
 
 export { Transaction }

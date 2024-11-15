@@ -24,7 +24,21 @@ const web3 = new Web3(NET.TEST);
 
 // Get the balance of an address
 const balance = await web3.addr.getBalance('0x1234567890abcdef1234567890abcdef12345678');
-console.log(balance);
+
+// Transfer dio
+const txnHash = await web3.txn.transfer({
+  to: '0x1234567890abcdef1234567890abcdef12345678:ed25519',
+  amount: '10000000000',
+  secretKey: secretKey,
+})
+
+// Transfer fca token
+const txnHash = await web3.txn.transferFCA({
+  symbol: 'FCA',
+  to: '0x1234567890abcdef1234567890abcdef12345678:ed25519',
+  amount: '10000000000',
+  secretKey: secretKey,
+})
 ```
 
 ## API
@@ -109,7 +123,7 @@ const txn = await web3.txn.sign(
     ttl: '30',
     tokens: [{'FXX': '10000000000'}]
   },
-  secretKeyArray,
+  secretKey,
 )
 {
   rawTxData: base64rawdata,
@@ -125,13 +139,13 @@ const txHash = await web3.txn.send(
     function: 'core.wallet.transfer',
     args: {
       Amount: '10000000000',
-      To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+      To: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
       TokenId: 'GXX',
     },
     ttl: '30',
     tokens: [{'FXX': '10000000000'}]
   },
-  secretKeyArray,
+  secretKey,
 )
 //wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10
 ```
@@ -143,13 +157,13 @@ const txn = await web3.txn.getTxn('wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03
 #### web3.txn.getEstimatedFee(originTxn: [OriginalTxn](#originaltxn))
 ```js
 const txn = await web3.txn.getEstimatedFee({
-    sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
+    sender: '0x1234567890abcdef1234567890abcdef12345678:ed25519',
     gasprice: 100,
     function: 'core.wallet.transfer',
     args: {
       Amount: '10000000000',
-      To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
-      TokenId: 'GXX',
+      To: '0x1234567890abcdef1234567890abcdef12345678:ed25519',
+      TokenId: 'FCA',
     },
   })
 //95500
@@ -159,7 +173,25 @@ const txn = await web3.txn.getEstimatedFee({
 const txnHash = await web3.txn.sendRawTx(base64rawData)
 //txnHash
 ```
-
+#### web3.txn.transfer({to: string, amount: string, secretKey: Unit8Array })
+```js
+const txnHash = await web3.txn.transfer({
+  to: '0x1234567890abcdef1234567890abcdef12345678:ed25519',
+  amount: '10000000000',
+  secretKey: secretKey,
+})
+//txnHash
+```
+#### web3.txn.transferFCA({to: string, amount: string, symbol: string, secretKey: Unit8Array })
+```js
+const txnHash = await web3.txn.transferFCA({
+  to: '0x1234567890abcdef1234567890abcdef12345678:ed25519',
+  amount: '10000000000',
+  symbol: 'FCA',
+  secretKey: secretKey,
+})
+//txnHash
+```
 ### utils
 
 #### utils.toTokenAmount(amount: string, decimals: number)

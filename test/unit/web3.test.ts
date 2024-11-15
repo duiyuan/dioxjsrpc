@@ -57,6 +57,27 @@ describe("web3 unit test", () => {
     expect(gas).not.toBeNull()
   })
 
+  it('transfer dio', async () => {
+    const txnHash = await web3.txn
+      .transfer({
+        to: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+        amount: '10000000000',
+        secretKey: new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
+      })
+    expect(txnHash).not.toBeNull()
+  })
+
+  it('transfer fca', async () => {
+    const txnHash = await web3.txn
+      .transferFCA({
+        symbol: 'GXX',
+        to: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+        amount: '10000000000',
+        secretKey: new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
+      })
+    expect(txnHash).not.toBeNull()
+  })
+
   /** utils */
 
   it('to token amount', () => {
