@@ -1,13 +1,7 @@
 import { getDefaultToken } from '../constants'
 import { fullAddress, isValidAddress } from '../utils'
 import Request from './request'
-import {
-  AddrBalance,
-  AddrBaseInfo,
-  DIOX,
-  DioxScanTxResponse,
-  TokenItem,
-} from './type'
+import { AddrBalance, AddrBaseInfo, DIOX, DioxScanTxResponse, TokenItem } from './type'
 import provider from './provider'
 
 type ListParmas = {
@@ -144,9 +138,7 @@ class AddressService extends Request {
       const dToken = getDefaultToken()
       const balance = res.Result?.State?.Balance.match(/\d+/g)
       if (res.Result?.Wallet) {
-        const defaultToken = res.Result?.Wallet?.find(
-          (w) => w.symbol === dToken.symbol,
-        )
+        const defaultToken = res.Result?.Wallet?.find((w) => w.symbol === dToken.symbol)
         if (defaultToken) {
           return (defaultToken?.amount || '0').toString().split(':')[0]
         }
@@ -158,9 +150,7 @@ class AddressService extends Request {
   async getAddressTokens(address: string) {
     const fullAddr = fullAddress(address)
     this.checkAddress(fullAddr)
-    const { Result } = await this.get<
-      CommonResponse<{ TotalNum: number; ListData: TokenItem[] }>
-    >('', {
+    const { Result } = await this.get<CommonResponse<{ TotalNum: number; ListData: TokenItem[] }>>('', {
       data: {
         module: 'address',
         action: 'tokens',
@@ -170,17 +160,12 @@ class AddressService extends Request {
     return Result?.ListData || []
   }
 
-  async getAddressTokenBalance(
-    address: string,
-    token: string,
-  ): Promise<string> {
+  async getAddressTokenBalance(address: string, token: string): Promise<string> {
     const fullAddr = fullAddress(address)
     this.checkAddress(fullAddr)
     const res = await this.getDetailInfo(address)
     if (res?.Result?.Wallet) {
-      const defaultToken = res.Result?.Wallet?.find(
-        (w) => w.symbol === token.split(':')[0],
-      )
+      const defaultToken = res.Result?.Wallet?.find((w) => w.symbol === token.split(':')[0])
       if (defaultToken) {
         return defaultToken.amount.toString()
       }

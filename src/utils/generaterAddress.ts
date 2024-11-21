@@ -36,10 +36,7 @@ class Address {
     // address.concatedSK = encode(this.concat(keyPair[1], keyPair[0]))
     // console.log(address)
     return {
-      address:
-        base32Encode(address.address, 'Crockford').toLocaleLowerCase() +
-        ':' +
-        address.encryptMethod,
+      address: base32Encode(address.address, 'Crockford').toLocaleLowerCase() + ':' + address.encryptMethod,
       words: this.words,
     }
   }

@@ -24,9 +24,7 @@ class Transaction {
   }
 
   private async compose(originalTxn: OriginalTxn) {
-    const { ret, err } = await this.txnServices.compose(
-      JSON.stringify(originalTxn),
-    )
+    const { ret, err } = await this.txnServices.compose(JSON.stringify(originalTxn))
     if (err) {
       throw new Error(ret.toString())
     }
@@ -40,21 +38,19 @@ class Transaction {
     if (!pk) {
       throw new Error('pk error')
     }
-    const dataWithPK = this.insertPK(txdata, [
-      { encryptedMethodOrderNumber: 0x3, publicKey: new Uint8Array(pk) },
-    ])
+    const dataWithPK = this.insertPK(txdata, [{ encryptedMethodOrderNumber: 0x3, publicKey: new Uint8Array(pk) }])
     const signedInfo = await ed.sign(dataWithPK, unit8ArraySecrectKey)
     const isValid = await ed.verify(signedInfo, dataWithPK, pk)
     if (!isValid) {
       throw new Error('sign error')
     }
     const finalInfo = concat(dataWithPK, signedInfo)
-    const powDiff = new PowDifficulty(finalInfo.buffer)
+    const powDiff = new PowDifficulty({
+      originTxn: finalInfo.buffer,
+      ttl: originalTxn.ttl,
+    })
     const finalInfowithNonce = powDiff.getHashMixinNonnce()
-    const hash = base32Encode(
-      sha256.arrayBuffer(finalInfowithNonce),
-      'Crockford',
-    )
+    const hash = base32Encode(sha256.arrayBuffer(finalInfowithNonce), 'Crockford')
     return {
       rawTxData: encode(finalInfowithNonce),
       hash: hash.toLowerCase(),
@@ -120,9 +116,7 @@ class Transaction {
       }),
     )
     if (err) {
-      throw new Error(
-        'services.compose failed: txdata is empty(' + ret.toString() + ')',
-      )
+      throw new Error('services.compose failed: txdata is empty(' + ret.toString() + ')')
     }
 
     const gasLimit = ret.GasOffered.toString()
@@ -134,11 +128,7 @@ class Transaction {
     return gasFee
   }
 
-  calculateGasFee(options: {
-    average: number
-    scale: number
-    gasLimit: number
-  }): number | string | bigint {
+  calculateGasFee(options: { average: number; scale: number; gasLimit: number }): number | string | bigint {
     const { average, scale = 3, gasLimit } = options
     const gasPrice = parseInt(((scale - 1) * 0.25 + 0.5) * average + '', 10)
     const gasFee = gasPrice * gasLimit
@@ -180,15 +170,7 @@ class Transaction {
   //   )
   // }
 
-  async transfer({
-    to,
-    amount,
-    secretKey,
-  }: {
-    to: string
-    amount: string
-    secretKey: Uint8Array
-  }) {
+  async transfer({ to, amount, secretKey, ttl }: { to: string; amount: string; secretKey: Uint8Array; ttl?: number }) {
     const sender = await this.sk2base32Address(secretKey)
     return this.send(
       {
@@ -199,6 +181,7 @@ class Transaction {
           To: to,
           Amount: amount,
         },
+        ttl,
       },
       secretKey,
     )
@@ -209,11 +192,13 @@ class Transaction {
     to,
     amount,
     secretKey,
+    ttl,
   }: {
     symbol: string
     to: string
     amount: string
     secretKey: Uint8Array
+    ttl?: number
   }) {
     const sender = await this.sk2base32Address(secretKey)
     return this.send(
@@ -226,6 +211,7 @@ class Transaction {
           Amount: amount,
           TokenId: symbol,
         },
+        ttl,
       },
       secretKey,
     )

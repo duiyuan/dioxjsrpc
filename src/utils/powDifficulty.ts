@@ -2,6 +2,11 @@ import { sha256 } from 'js-sha256'
 import { sha512 } from 'js-sha512'
 const NONCE_LEN = 12
 
+interface IPowDifficulty {
+  originTxn: ArrayBuffer
+  hashSize?: number
+  ttl?: number
+}
 class PowDifficulty {
   hashSize: number
   targetNum: bigint
@@ -10,7 +15,7 @@ class PowDifficulty {
   powData: ArrayBuffer
   ttl: number
 
-  constructor(originTxn: ArrayBuffer, hashSize?: number, ttl?: number) {
+  constructor({ originTxn, hashSize, ttl }: IPowDifficulty) {
     this.hashSize = hashSize || 32
     this.targetNum = BigInt(0)
     this.nonZeroBytes = 0
@@ -52,9 +57,7 @@ class PowDifficulty {
     const end = this.hashSize
     const start = this.nonZeroBytes
 
-    if (
-      this.targetNum <= new DataView(sha256Buffer).getUint32(start - 4, true)
-    ) {
+    if (this.targetNum <= new DataView(sha256Buffer).getUint32(start - 4, true)) {
       return false
     }
 
@@ -71,10 +74,7 @@ class PowDifficulty {
 
   getNonce() {
     // set diffculty
-    this.Set(
-      (1000 + (this.originTxn.byteLength + NONCE_LEN) * (this.ttl * 10 + 100)) /
-        3,
-    )
+    this.Set((1000 + (this.originTxn.byteLength + NONCE_LEN) * (this.ttl * 10 + 100)) / 3)
     // loop nonce
     const nonces: number[] = []
     let nonce = 0
@@ -101,10 +101,7 @@ class PowDifficulty {
     finalBytes.set(new Uint8Array(this.originTxn), 0)
     // add nonce to last
     nonces.forEach((nonce, i) => {
-      finalBytes.set(
-        new Uint8Array(new Uint32Array([nonce]).buffer),
-        this.originTxn.byteLength + i * 4,
-      )
+      finalBytes.set(new Uint8Array(new Uint32Array([nonce]).buffer), this.originTxn.byteLength + i * 4)
     })
     return finalBytes.buffer
   }
