@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/duiyuan/web3/compare/v0.0.10...v0.0.11) (2024-11-21)
+
+
+### Features
+
+* add jest clear ([c788052](https://github.com/duiyuan/web3/commit/c7880520124878f3df44405a5a3eb8fbf6d2d4b2))
+* add prebuild for version ([8da2d6d](https://github.com/duiyuan/web3/commit/8da2d6d65dbf5e1d7ab55f519808c4095cbf014a))
+* add workflow_dispatch ([a895f42](https://github.com/duiyuan/web3/commit/a895f420c7a2fa0c17fae7b7f997821588a4fe65))
+* update ttl ([c478a37](https://github.com/duiyuan/web3/commit/c478a37051a429d5a788ea8bd6b41959c121ada6))
+* update version ([348fceb](https://github.com/duiyuan/web3/commit/348fceb93073e903f7456032380fe12a3e10f21c))
+* version static ([c9263ef](https://github.com/duiyuan/web3/commit/c9263ef4cd51a2390610f17465ddcd20cc2cced4))
+
 ### [0.0.10](https://github.com/duiyuan/web3/compare/v0.0.9...v0.0.10) (2024-11-15)
 
 
