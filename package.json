@@ -33,7 +33,7 @@
     "build:check": "node -e \"require('./lib')\"",
     "lint": "eslint --cache --cache-strategy content --ext .ts .",
     "lint:fix": "eslint --fix --ext .js,.ts .",
-    "test": "jest --config ./test/unit/jest.config.js",
+    "test": "jest --clearCache && jest --config ./test/unit/jest.config.js",
     "watch": "onchange \"src/**/*\" -e \"src/constants/version.ts\" -- yarn build"
   },
   "author": "dioxide",
