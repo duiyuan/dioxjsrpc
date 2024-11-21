@@ -31,7 +31,7 @@ class Web3 {
     provider.set(net)
   }
 
-  public version() {
+  static version() {
     return LIB_VERSION
   }
 }
