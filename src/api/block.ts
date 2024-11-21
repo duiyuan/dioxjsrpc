@@ -2,11 +2,7 @@ import Request from './request'
 import { DIOX } from './type'
 
 class BlockSvc extends Request {
-  async getExcutedTx(params: {
-    height: number
-    limit?: number
-    pos?: number
-  }): Promise<DIOX.ExcutedTx | undefined> {
+  async getExcutedTx(params: { height: number; limit?: number; pos?: number }): Promise<DIOX.ExcutedTx | undefined> {
     const { limit = 500, pos = 0, height } = params
     const data = {
       limit,
