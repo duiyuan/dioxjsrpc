@@ -98,9 +98,9 @@ const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5a
   }
 }
 ```
-#### web3.addr.getTxnListByAddress(address: string): [DIOX.TxSummary](#dioxtxsummary)[]
+#### web3.addr.getTxnListByAddress(params: [ListParmas](#listparmas)[]): [DIOX.TxSummary](#dioxtxsummary)[]
 ```js
-const txnList = await web3.addr.getTxnListByAddress('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+const txnList = await web3.addr.getTxnListByAddress({address: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm'})
 {
   TotalNum: 404,
   ListData: DIOX.TxSummary[]
@@ -311,6 +311,18 @@ interface OriginalTxn {
     }[];
     ttl: string | number;
     scale?: number;
+}
+```
+
+### ListParmas
+```js
+interface ListParams {
+  address: string
+  addresstxntype?: string
+  shardIndex?: string
+  height?: number
+  pos?: number
+  limit?: number
 }
 ```
 
