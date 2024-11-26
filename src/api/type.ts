@@ -223,7 +223,7 @@ export declare namespace DIOX {
 }
 
 export interface OriginalTxn {
-  gasprice: string | number
+  gasprice?: string | number
   sender: string
   function: string
   args: KeyValue
@@ -236,7 +236,7 @@ export interface OriginalTxn {
 
 export interface AddrBalance {
   Address: string
-  Height: 49
+  Height: number
   State: {
     Balance: string
   }
