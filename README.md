@@ -143,7 +143,6 @@ const txHash = await web3.txn.send(
       TokenId: 'GXX',
     },
     ttl: '30',
-    tokens: [{'FXX': '10000000000'}]
   },
   secretKey,
 )
@@ -194,6 +193,11 @@ const txnHash = await web3.txn.transferFCA({
 ```
 ### utils
 
+#### utils.generateAddress(targetShardIndex: number): { address: string, seed:Unit8Array }
+```js
+const { address, seed } = utils.generateAddress(1)
+// address: qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420: ed25519
+```
 #### utils.toTokenAmount(amount: string, decimals: number)
 ```js
 const isValid = utils.toTokenAmount('100000000', 8)
