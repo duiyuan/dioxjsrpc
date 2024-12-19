@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/duiyuan/web3/compare/v0.0.12...v0.0.13) (2024-12-19)
+
+
+### Features
+
+* update generateAddress & add seed2PairOfKey encodeAddressBuffer ([8a92e14](https://github.com/duiyuan/web3/commit/8a92e1402f98b264c3e145b18e7754844b0f3194))
+
 ### [0.0.12](https://github.com/duiyuan/web3/compare/v0.0.11...v0.0.12) (2024-11-26)
 
 
