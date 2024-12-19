@@ -26,8 +26,8 @@ class Address {
     this.seed = this.generateSeed()
   }
 
-  async generateAddressAndMnemonic() {
-    const keyPair = await this.generatePairOfKey(this.salt)
+  async generateAddress() {
+    const keyPair = await seed2PairOfKey(this.seed, this.salt)
     if (!keyPair) throw new Error('Invalid key received')
 
     const address = pk2Address(keyPair[0])
@@ -38,6 +38,7 @@ class Address {
     return {
       address: base32Encode(address.address, 'Crockford').toLocaleLowerCase() + ':' + address.encryptMethod,
       words: this.words,
+      seed: this.seed,
     }
   }
 
@@ -57,22 +58,6 @@ class Address {
       console.error('Exception ' + error)
     }
     return new Uint8Array()
-  }
-
-  async generatePairOfKey(salt: Uint8Array) {
-    // sk = sha256(seed + sha256(salt))
-    if (!this.seed) throw new Error('Invalid seed')
-    const formatedSeed = concat(this.seed, salt)
-    const privateKeyStr = sha256(formatedSeed as Buffer, { asBytes: true })
-    const privateKey = new Uint8Array(privateKeyStr)
-    // console.log('privateKey', privateKey)
-    const publicKey = await ed.getPublicKey(privateKey)
-
-    if (!privateKey || !publicKey) {
-      return undefined
-    }
-
-    return [publicKey, privateKey]
   }
 
   encodeMnemonic(seed: number[] | Uint8Array) {
@@ -4206,14 +4191,17 @@ const dictionary = [
 
 export async function generateAddress(shardIndex?: number) {
   const addressInstance = new Address()
-  const address = await addressInstance.generateAddressAndMnemonic()
+  const { address, seed } = await addressInstance.generateAddress()
   if (shardIndex !== undefined) {
-    const targetShardIndex = addressToShard(address.address)
+    const targetShardIndex = addressToShard(address)
     if (targetShardIndex !== shardIndex) {
       return generateAddress(shardIndex)
     }
   }
-  return address
+  return {
+    address,
+    seed,
+  }
 }
 
 export function pk2Address(
@@ -4241,4 +4229,22 @@ export function pk2Address(
     alias: alias || `Address${salt}`,
   }
   return address
+}
+
+export async function seed2PairOfKey(seed: Uint8Array, salt: Uint8Array = new Uint8Array()) {
+  if (!seed) throw new Error('Invalid seed')
+  const formatedSeed = concat(seed, salt)
+  const privateKeyStr = sha256(formatedSeed as Buffer, { asBytes: true })
+  const privateKey = new Uint8Array(privateKeyStr)
+  const publicKey = await ed.getPublicKey(privateKey)
+
+  if (!privateKey || !publicKey) {
+    return undefined
+  }
+
+  return [publicKey, privateKey]
+}
+
+export function encodeAddressBuffer(address: Uint8Array): string {
+  return base32Encode(address, 'Crockford').toLocaleLowerCase()
 }
