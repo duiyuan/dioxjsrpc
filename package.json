@@ -4,6 +4,7 @@
   "description": "dioxide javascript API",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/esm/index.js",
+  "browser": "./dist/main.bundle.js",
   "typings": "./lib/types/index.d.ts",
   "keywords": [
     "dioxide",
@@ -14,7 +15,8 @@
     ".": {
       "types": "./lib/types/index.d.ts",
       "import": "./lib/esm/index.js",
-      "require": "./lib/commonjs/index.js"
+      "require": "./lib/commonjs/index.js",
+      "browser": "./dist/main.bundle.js"
     }
   },
   "engines": {
@@ -22,13 +24,15 @@
   },
   "files": [
     "lib/**/*",
-    "src/**/*"
+    "src/**/*",
+    "dist/**/*"
   ],
   "scripts": {
     "build": "concurrently --kill-others-on-fail \"yarn:build:*(!check) \"",
     "build:pre": "node ./prebuild",
     "build:cjs": "tsc --build tsconfig.cjs.json && node ./cjspkg",
     "build:esm": "tsc --build tsconfig.esm.json && node ./esmpkg",
+    "build:browser": "webpack --config webpack.config.js && node ./browserpkg",
     "build:types": "tsc --build tsconfig.types.json",
     "build:check": "node -e \"require('./lib')\"",
     "lint": "eslint --cache --cache-strategy content --ext .ts .",
@@ -61,13 +65,24 @@
     "base32-decode": "1.0.0",
     "base32-encode": "1",
     "base64-arraybuffer": "1.0.2",
+    "buffer": "^6.0.3",
+    "compression-webpack-plugin": "^11.1.0",
     "crc-32": "1.2.2",
+    "crypto-browserify": "^3.12.1",
     "dotenv": "^16.4.5",
     "js-sha256": "0.10.1",
     "js-sha512": "0.8.0",
     "json-bigint": "1.0.0",
     "node-fetch": "2",
+    "path-browserify": "^1.0.1",
     "query-string": "7.1.1",
-    "sha256": "0.2.0"
+    "sha256": "0.2.0",
+    "stream-browserify": "^3.0.0",
+    "terser-webpack-plugin": "^5.3.14",
+    "ts-loader": "^9.5.2",
+    "vm-browserify": "^1.1.2",
+    "webpack": "^5.98.0",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^6.0.1"
   }
 }
