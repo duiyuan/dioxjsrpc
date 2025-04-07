@@ -1,4 +1,4 @@
-import { getProvider } from '../constants'
+import { getProvider } from '../constants/index'
 
 class SingleProvider {
   private dioxide: string

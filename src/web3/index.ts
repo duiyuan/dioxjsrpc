@@ -1,4 +1,4 @@
-import { NET } from '../constants'
+import { NET } from '../constants/index'
 import Address from '../api/address'
 import { Transaction } from './transaction'
 import provider from '../api/provider'

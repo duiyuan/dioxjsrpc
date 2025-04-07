@@ -1,6 +1,6 @@
-import { Web3 } from './web3'
-import * as utils from './utils'
-export * from './constants'
+import { Web3 } from './web3/index'
+import * as utils from './utils/index'
+export * from './constants/index'
 export * from './api/type'
 
 export { Web3, utils }

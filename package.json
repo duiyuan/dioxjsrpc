@@ -17,6 +17,15 @@
       "import": "./lib/esm/index.js",
       "require": "./lib/commonjs/index.js",
       "browser": "./dist/main.bundle.js"
+    },
+    "./lib/esm/index.js": {
+      "import": "./lib/esm/index.js"
+    },
+    "./lib/esm/web3": {
+      "import": "./lib/esm/web3/index.js"
+    },
+    "./lib/commonjs/index.js": {
+      "require": "./lib/commonjs/index.js"
     }
   },
   "engines": {

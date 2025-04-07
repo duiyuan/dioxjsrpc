@@ -1,5 +1,5 @@
-import { getDefaultToken } from '../constants'
-import { fullAddress, isValidAddress } from '../utils'
+import { getDefaultToken } from '../constants/index'
+import { fullAddress, isValidAddress } from '../utils/index'
 import Request from './request'
 import { AddrBalance, AddrBaseInfo, DIOX, DioxScanTxResponse, TokenItem } from './type'
 import provider from './provider'
