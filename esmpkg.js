@@ -55,7 +55,7 @@ function updateImportAndExportPaths(filePath) {
 
   if (updatedContent !== fileContent) {
     fs.writeFileSync(filePath, updatedContent, 'utf-8')
-    console.log(`已更新: ${filePath}`)
+    console.log(`File Updated: ${filePath}`)
   }
 }
 
