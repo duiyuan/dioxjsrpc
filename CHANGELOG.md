@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/duiyuan/web3/compare/v0.0.13...v0.0.14) (2025-04-17)
+
+
+### Features
+
+* change webpack to rollup ([e30b958](https://github.com/duiyuan/web3/commit/e30b95838bc4adf135a239d3ae5db05a66f953e3))
+* webpack to make sdk run in browser env ([4ef8d51](https://github.com/duiyuan/web3/commit/4ef8d51cf7f46c315ab37f03a5556b0f5d421b03))
+
+
+### Bug Fixes
+
+* esm bug fix ([5c55e50](https://github.com/duiyuan/web3/commit/5c55e50ddca155305da8a88d29712a0a280bbfd0))
+
 ### [0.0.13](https://github.com/duiyuan/web3/compare/v0.0.12...v0.0.13) (2024-12-19)
 
 
