@@ -1,35 +1,35 @@
 const { Web3, utils, NET } = require('../../lib/commonjs')
 const { decode } = require('base64-arraybuffer')
-const base32Encode = require("base32-encode")
+const base32Encode = require('base32-encode')
 
-describe("web3 unit test", () => {
+describe('web3 unit test', () => {
   const web3 = new Web3(NET.TEST)
 
   it('get address balance', async () => {
-    const balance = await web3.addr
-      .getBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+    const balance = await web3.addr.getBalance('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
     expect(+utils.toTokenAmount(balance, 8)).toBeGreaterThan(0)
   })
 
   it('get address info', async () => {
-    const info = await web3.addr
-      .getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
+    const info = await web3.addr.getAddressInfo('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
     expect(info.Name).toEqual('forTest')
   })
 
   it('get address ISN', async () => {
     const isn = await web3.addr.getISN('eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm')
-    expect(isn).toBeNumber
+    expect(typeof isn).toBe('number')
   })
 
   it('sign data', async () => {
-    const raw = await web3.txn
-      .sign({
+    const raw = await web3.txn.sign(
+      {
         args: { Amount: '200000000', To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519' },
         function: 'core.coin.transfer',
         gasprice: '100',
         sender: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
-      }, new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')))
+      },
+      new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
+    )
     expect(raw).not.toBeNull()
   })
 
@@ -58,23 +58,21 @@ describe("web3 unit test", () => {
   })
 
   it('transfer dio', async () => {
-    const txnHash = await web3.txn
-      .transfer({
-        to: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
-        amount: '10000000000',
-        secretKey: new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
-      })
+    const txnHash = await web3.txn.transfer({
+      to: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+      amount: '10000000000',
+      secretKey: new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
+    })
     expect(txnHash).not.toBeNull()
   })
 
   it('transfer fca', async () => {
-    const txnHash = await web3.txn
-      .transferFCA({
-        symbol: 'GXX',
-        to: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
-        amount: '10000000000',
-        secretKey: new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
-      })
+    const txnHash = await web3.txn.transferFCA({
+      symbol: 'GXX',
+      to: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+      amount: '10000000000',
+      secretKey: new Uint8Array(decode('KHwdnMOhputNfUWjqhKECx7CeBjgZoWhen0dgsXS34k=')),
+    })
     expect(txnHash).not.toBeNull()
   })
 
