@@ -11,9 +11,9 @@ export default class Fetcher {
     return 'Bearer ' + this.apiKey
   }
 
-  constructor(opts: { apiKey: string }) {
+  constructor(opts: { apiKey?: string }) {
     const { apiKey } = opts
-    this.apiKey = apiKey ?? provider.apiKey
+    this.apiKey = apiKey ?? provider.apiKey ?? ''
   }
 
   prune = (url: string) => (url.endsWith('/') ? url.slice(0, -1) : url)
@@ -42,5 +42,33 @@ export default class Fetcher {
       throw error.message
     }
     return result
+  }
+
+  /**
+   * REST request
+   * @param url full request address (contains query parameters)
+   * @param params  parameters to send as body
+   * @example: url: http://{{local_rpc}}/api?req=dx.overview
+   */
+
+  async rest<T>(url: string, params: any = {}, opts: AxiosRequestConfig = {}): Promise<T> {
+    if (!url) {
+      throw new Error('url is required for REST request')
+    }
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: this.autherization,
+      ...(opts.headers || {}),
+    }
+
+    const { data } = await axios.get<T>(url, {
+      ...opts,
+      headers,
+      data: params,
+      timeout: opts.timeout ?? TIMEOUT,
+    })
+
+    return data
   }
 }

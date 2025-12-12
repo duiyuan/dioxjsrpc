@@ -34,7 +34,8 @@ function encode(data: Uint8Array | ArrayBuffer) {
 
 export interface TxOption {
   alg?: Alg
-  apiKey: string
+  apiKey?: string
+  bcBaseUrl?: string
   showDuration?: boolean
   n?: number
   customSign?: SignMethod
