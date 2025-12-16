@@ -4,6 +4,7 @@ import { Transaction } from './transaction'
 import provider from '../api/provider'
 import Blocks from '../api/block'
 import Overview from '../api/overview'
+import Dx from './dx'
 import { LIB_VERSION } from '../constants/version'
 
 class Web3 {
@@ -13,6 +14,7 @@ class Web3 {
   txn: Transaction
   blocks: Blocks
   overview: Overview
+  dx: Dx
 
   constructor(net: Provider) {
     this.net = net || NET.TEST
@@ -22,6 +24,7 @@ class Web3 {
     this.blocks = new Blocks()
     this.overview = new Overview()
     this.txn = new Transaction()
+    this.dx = new Dx()
 
     console.log('Dioxide initialized with net: ', this.net)
   }

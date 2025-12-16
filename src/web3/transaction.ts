@@ -38,8 +38,10 @@ class Transaction {
     if (!pk) {
       throw new Error('pk error')
     }
-    const dataWithPK = this.insertPK(txdata, [{ encryptedMethodOrderNumber: 0x3, publicKey: new Uint8Array(pk) }])
-    const signedInfo = await ed.sign(dataWithPK, unit8ArraySecrectKey)
+    const dataWithPK = this.insertPK(txdata, [
+      { encryptedMethodOrderNumber: 0x3, publicKey: new Uint8Array(pk) },
+    ]) as any
+    const signedInfo: any = await ed.sign(dataWithPK, unit8ArraySecrectKey)
     const isValid = await ed.verify(signedInfo, dataWithPK, pk)
     if (!isValid) {
       throw new Error('sign error')
@@ -64,6 +66,22 @@ class Transaction {
         txdata: signData,
       }),
     )
+    if (err) {
+      throw new Error(ret.toString())
+    }
+    return ret.Hash
+  }
+
+  // send transaction with SK, need to pass in the private key, only for development use !!!
+  async sendWithSK(originTxn: {
+    privatekey: string
+    function: string
+    args?: Record<string, string>
+    delegatee?: string
+    tokens?: Record<string, string>[]
+  }) {
+    const { ret, err } = await this.txnServices.sendTransactionWithSK(JSON.stringify(originTxn))
+
     if (err) {
       throw new Error(ret.toString())
     }
@@ -95,7 +113,7 @@ class Transaction {
       secSuites.push(id)
       secSuites.push(pk)
     })
-    const result = concat(originTxData, ...secSuites)
+    const result = concat(originTxData as any, ...(secSuites as any))
     return result
   }
 

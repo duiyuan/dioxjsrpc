@@ -18,6 +18,12 @@ export function getSendUrl() {
   return encodeUri
 }
 
+export function getSendWithSKUrl() {
+  const { rpc } = provider.get()
+  const encodeUri = encodeURI(rpc + '/api?req=tx.send_withSK')
+  return encodeUri
+}
+
 export interface ExcutedTxCond {
   height: number
   limit?: number
@@ -39,6 +45,15 @@ class TransactionService extends Request {
       rsp: string
       ret: { Hash: string; Shard: number }
     }>(getSendUrl(), { body })
+  }
+
+  // send transaction with SK, need to pass in the private key, only for development use !!!
+  sendTransactionWithSK(body: string) {
+    return this.get<{
+      err?: number
+      rsp: string
+      ret: { Hash: string }
+    }>(getSendWithSKUrl(), { data: { body } })
   }
 
   async getTransactionByHash(hash: string) {
