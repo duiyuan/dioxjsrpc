@@ -110,7 +110,15 @@ export default class Dx extends Request {
     return this.dxSvc.dappInfo(name)
   }
 
-  async generateKey(shard_index?: string | number, algo?: number) {
+  /**
+   * Generate key pair
+   * @param shard_index Optional. Shard index
+   * @param algo Optional. Key algorithm: 0 = ed25519, 1 = ethereum, 2 = sm2
+   */
+  async generateKey(shard_index?: string | number, algo?: 0 | 1 | 2) {
+    if (algo !== undefined && ![0, 1, 2].includes(algo)) {
+      throw new Error('Invalid algo parameter. Must be 0 (ed25519), 1 (ethereum), or 2 (sm2)')
+    }
     return this.dxSvc.generateKey(shard_index, algo)
   }
 

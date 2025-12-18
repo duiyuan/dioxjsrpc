@@ -73,22 +73,6 @@ class Transaction {
     return ret.Hash
   }
 
-  // send transaction with SK, need to pass in the private key, only for development use !!!
-  async sendWithSK(originTxn: {
-    privatekey: string
-    function: string
-    args?: Record<string, string>
-    delegatee?: string
-    tokens?: Record<string, string>[]
-  }) {
-    const { ret, err } = await this.txnServices.sendTransactionWithSK(json.stringify(originTxn))
-
-    if (err) {
-      throw new Error(ret.toString())
-    }
-    return ret.Hash
-  }
-
   async sendRawTx(rawTxData: string) {
     const { ret, err } = await this.txnServices.sendTransaction(
       json.stringify({
