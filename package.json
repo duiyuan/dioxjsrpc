@@ -1,7 +1,7 @@
 {
-  "name": "@dioxide-js/web3.js",
+  "name": "@dioxide-js/dioxjsrpc",
   "version": "0.0.14",
-  "description": "dioxide javascript API",
+  "description": "dioxide javascript rpc API",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/esm/index.js",
   "browser": "./dist/main.bundle.js",

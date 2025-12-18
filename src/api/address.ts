@@ -1,3 +1,4 @@
+import json from 'json-bigint'
 import { getDefaultToken } from '../constants/index'
 import { fullAddress, isValidAddress } from '../utils/index'
 import Request from './request'
@@ -51,7 +52,7 @@ class AddressService extends Request {
   //     rsp: string
   //     ret: RefundItem[]
   //   }>(getRefundUrl(), {
-  //     body: JSON.stringify({
+  //     body: json.stringify({
   //       address: fullAddr,
   //     }),
   //   })
@@ -67,7 +68,7 @@ class AddressService extends Request {
   //     rsp: string
   //     ret: RefundItem[]
   //   }>(getResidualUrl(), {
-  //     body: JSON.stringify({
+  //     body: json.stringify({
   //       address: fullAddr,
   //       token,
   //     }),
@@ -84,7 +85,7 @@ class AddressService extends Request {
       rsp: string
       ret: { ISN: number }
     }>(getISNUrl(), {
-      body: JSON.stringify({
+      body: json.stringify({
         address: fullAddr,
       }),
     })

@@ -65,7 +65,7 @@ export default class Fetcher {
 
       fetch(absoluteUrl, concatOption)
         .then(checkStatus)
-        .then((r) => r.json().then((json) => res(json as T)))
+        .then((r) => r.text().then((text) => res(json.parse(text))))
         .finally(() => {
           clearTimeout(timeout)
         })

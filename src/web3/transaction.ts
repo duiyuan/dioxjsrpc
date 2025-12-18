@@ -2,6 +2,7 @@ import { decode, encode } from 'base64-arraybuffer'
 import { sha256 } from 'js-sha256'
 import * as ed from '@noble/ed25519'
 import base32Encode from 'base32-encode'
+import json from 'json-bigint'
 
 import TransactionService, { ExcutedTxCond } from '../api/transactions'
 import { concat, fullAddress, pk2Address } from '../utils/index'
@@ -24,7 +25,7 @@ class Transaction {
   }
 
   private async compose(originalTxn: OriginalTxn) {
-    const { ret, err } = await this.txnServices.compose(JSON.stringify(originalTxn))
+    const { ret, err } = await this.txnServices.compose(json.stringify(originalTxn))
     if (err) {
       throw new Error(ret.toString())
     }
@@ -62,7 +63,7 @@ class Transaction {
   async send(originTxn: OriginalTxn, secretKey: Uint8Array) {
     const { rawTxData: signData } = await this.sign(originTxn, secretKey)
     const { ret, err } = await this.txnServices.sendTransaction(
-      JSON.stringify({
+      json.stringify({
         txdata: signData,
       }),
     )
@@ -80,7 +81,7 @@ class Transaction {
     delegatee?: string
     tokens?: Record<string, string>[]
   }) {
-    const { ret, err } = await this.txnServices.sendTransactionWithSK(JSON.stringify(originTxn))
+    const { ret, err } = await this.txnServices.sendTransactionWithSK(json.stringify(originTxn))
 
     if (err) {
       throw new Error(ret.toString())
@@ -90,7 +91,7 @@ class Transaction {
 
   async sendRawTx(rawTxData: string) {
     const { ret, err } = await this.txnServices.sendTransaction(
-      JSON.stringify({
+      json.stringify({
         txdata: rawTxData,
       }),
     )
@@ -124,7 +125,7 @@ class Transaction {
     const to = args.to || args.To
 
     const { ret, err } = await this.txnServices.compose(
-      JSON.stringify({
+      json.stringify({
         sender: to,
         gasprice: avgGasPrice,
         delegatee: delegatee,
