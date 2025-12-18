@@ -54,9 +54,9 @@ export default class Tx extends Request {
   async sendWithSK(params: {
     privatekey: string
     function: string
-    args?: Record<string, string>
+    args?: Record<string, any>
     delegatee?: string
-    tokens?: Record<string, string>[]
+    tokens?: Record<string, any>[]
   }) {
     return this.post<{
       err?: number
