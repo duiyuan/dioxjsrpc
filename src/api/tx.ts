@@ -26,28 +26,34 @@ export default class Tx extends Request {
     tokens?: Record<string, string>[]
     gaslimit?: number
     isn?: string
-  }) {
-    return this.post<{
+  }): Promise<{ TxData: string; GasOffered: number }> {
+    const resp = await this.post<{
       err?: number
       rsp: string
       ret: { TxData: string; GasOffered: number }
     }>(this.getRpcUrl('tx.compose'), { body: json.stringify(params) })
+
+    return this.handleResponse(resp)
   }
 
-  async sign(params: { sk: string[]; txdata: string }) {
-    return this.post<{
+  async sign(params: { sk: string[]; txdata: string }): Promise<{ TxData: string }> {
+    const resp = await this.post<{
       err?: number
       rsp: string
       ret: { TxData: string }
     }>(this.getRpcUrl('tx.sign'), { body: json.stringify(params) })
+
+    return this.handleResponse(resp)
   }
 
-  async send(params: { txdata: string }) {
-    return this.post<{
+  async send(params: { txdata: string }): Promise<{ Hash: string }> {
+    const resp = await this.post<{
       err?: number
       rsp: string
       ret: { Hash: string }
     }>(this.getRpcUrl('tx.send'), { body: json.stringify(params) })
+
+    return this.handleResponse(resp)
   }
 
   // send transaction with SK, need to pass in the private key, only for development use !!!
@@ -57,11 +63,13 @@ export default class Tx extends Request {
     args?: Record<string, any>
     delegatee?: string
     tokens?: Record<string, any>[]
-  }) {
-    return this.post<{
+  }): Promise<{ Hash: string }> {
+    const resp = await this.post<{
       err?: number
       rsp: string
       ret: { Hash: string }
     }>(this.getRpcUrl('tx.send_withSK'), { body: json.stringify(params) })
+
+    return this.handleResponse(resp)
   }
 }

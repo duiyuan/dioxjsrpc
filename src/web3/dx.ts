@@ -5,6 +5,7 @@
 
 import Request from '../api/request'
 import DxService from '../api/dx'
+import { ConsensusHeaderQueryType, KeyAlgorithm } from '../api/type'
 
 export default class Dx extends Request {
   dxSvc: DxService
@@ -50,7 +51,7 @@ export default class Dx extends Request {
   }
 
   async getConsensusHeader(params: {
-    query_type: 0 | 1 | 2
+    query_type: ConsensusHeaderQueryType
     height?: number
     hash?: string
     start?: number
@@ -71,7 +72,7 @@ export default class Dx extends Request {
   }
 
   async getTransactionBlock(params: {
-    query_type: 0 | 1 | 2
+    query_type: ConsensusHeaderQueryType
     shard_index: string | number
     height?: number
     hash?: string
@@ -115,8 +116,11 @@ export default class Dx extends Request {
    * @param shard_index Optional. Shard index
    * @param algo Optional. Key algorithm: 0 = ed25519, 1 = ethereum, 2 = sm2
    */
-  async generateKey(shard_index?: string | number, algo?: 0 | 1 | 2) {
-    if (algo !== undefined && ![0, 1, 2].includes(algo)) {
+  async generateKey(shard_index?: string | number, algo?: KeyAlgorithm) {
+    if (
+      algo !== undefined &&
+      !(algo === KeyAlgorithm.ED25519 || algo === KeyAlgorithm.ETHEREUM || algo === KeyAlgorithm.SM2)
+    ) {
       throw new Error('Invalid algo parameter. Must be 0 (ed25519), 1 (ethereum), or 2 (sm2)')
     }
     return this.dxSvc.generateKey(shard_index, algo)

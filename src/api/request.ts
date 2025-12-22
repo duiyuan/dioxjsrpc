@@ -14,8 +14,28 @@ function checkStatus(response: Response) {
   }
 }
 
+export class RpcError extends Error {
+  code: number
+  rsp: string
+  ret: string
+  constructor(code: number, rsp: string, ret: string) {
+    super(`RPC Error: ${rsp} (code: ${code})`)
+    this.name = 'RpcError'
+    this.code = code
+    this.rsp = rsp
+    this.ret = ret
+  }
+}
+
 export default class Fetcher {
   prune = (url: string) => (url.endsWith('/') ? url.slice(0, -1) : url)
+
+  protected handleResponse<T>(resp: { err?: number; rsp: string; ret: T }): T {
+    if (resp.err) {
+      throw new RpcError(resp.err, resp.rsp, String(resp.ret))
+    }
+    return resp.ret
+  }
 
   get<T>(service: string, options: any): Promise<T> {
     return new Promise((res) => {

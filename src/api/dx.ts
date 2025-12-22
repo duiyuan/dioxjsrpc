@@ -9,6 +9,7 @@ import provider from './provider'
 import Request from './request'
 import {
   CommittedHeadHeightResponse,
+  ConsensusHeaderQueryType,
   ConsensusHeaderResponse,
   ContractInfoResponse,
   ContractStateResponse,
@@ -20,6 +21,7 @@ import {
   TokenInfoResponse,
   TransactionBlockResponse,
   TransactionResponse,
+  KeyAlgorithm,
 } from './type'
 
 class DxService extends Request {
@@ -30,50 +32,51 @@ class DxService extends Request {
     return encodeUri
   }
 
-  async overview() {
+  async overview(): Promise<OverviewResponse> {
     const rpcUrl = this.getRpcUrl('dx.overview')
 
     const resp = await this.get<{
       err?: number
       rsp: string
-      ret: OverviewResponse | string
+      ret: OverviewResponse
     }>(rpcUrl, {})
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async committedHeadHeight() {
+  async committedHeadHeight(): Promise<CommittedHeadHeightResponse> {
     const rpcUrl = this.getRpcUrl('dx.committed_head_height')
     const resp = await this.get<{
       err?: number
       rsp: string
-      ret: CommittedHeadHeightResponse | string
+      ret: CommittedHeadHeightResponse
     }>(rpcUrl, {})
 
-    return resp
+    return this.handleResponse(resp)
   }
-  async isMining() {
+
+  async isMining(): Promise<{ Mining: boolean }> {
     const rpcUrl = this.getRpcUrl('dx.mining')
 
     const resp = await this.get<{
       err?: number
       rsp: string
-      ret: { Mining: boolean } | string
+      ret: { Mining: boolean }
     }>(rpcUrl, {})
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async shardInfo(shard_index: number | string) {
+  async shardInfo(shard_index: number | string): Promise<ShardInfoResponse> {
     const rpcUrl = this.getRpcUrl('dx.shard_info')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: ShardInfoResponse | string
+      ret: ShardInfoResponse
     }>(rpcUrl, { body: json.stringify({ shard_index }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
   /**
@@ -84,110 +87,110 @@ class DxService extends Request {
   async shardIndex(
     scope: 'global' | 'shard' | 'address' | 'uint32' | 'uint64' | 'uint128' | 'uint256' | 'uint512',
     scope_key?: string,
-  ) {
+  ): Promise<{ ShardIndex: number }> {
     const rpcUrl = this.getRpcUrl('dx.shard_index')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: { ShardIndex: number } | string
+      ret: { ShardIndex: number }
     }>(rpcUrl, { body: json.stringify({ scope, scope_key }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async mempool(shard_index?: string | number, archived?: string | number) {
+  async mempool(shard_index?: string | number, archived?: string | number): Promise<MempoolResponse> {
     const rpcUrl = this.getRpcUrl('dx.mempool')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: MempoolResponse | string
+      ret: MempoolResponse
     }>(rpcUrl, { body: json.stringify({ shard_index, archived }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
   /**
    * @param contract_with_scope: name search: <dapp>.<contract>.<scope>; cid search: <cid>.<scope>
    * @param scope_key: string, scope key
    */
-  async contractState(contract_with_scope: string, scope_key: string) {
+  async contractState(contract_with_scope: string, scope_key: string): Promise<ContractStateResponse> {
     const rpcUrl = this.getRpcUrl('dx.contract_state')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: ContractStateResponse | string
+      ret: ContractStateResponse
     }>(rpcUrl, { body: json.stringify({ contract_with_scope, scope_key }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
   async consensusHeader(params: {
-    query_type: 0 | 1 | 2
+    query_type: ConsensusHeaderQueryType
     height?: number
     hash?: string
     start?: number
     end?: number
     runtime?: boolean
-  }) {
+  }): Promise<ConsensusHeaderResponse> {
     const rpcUrl = this.getRpcUrl('dx.consensus_header')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: ConsensusHeaderResponse | string
+      ret: ConsensusHeaderResponse
     }>(rpcUrl, { body: json.stringify(params) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
   async transactionBlock(params: {
-    query_type: 0 | 1 | 2
+    query_type: ConsensusHeaderQueryType
     shard_index: string | number
     height?: number
     hash?: string
     start?: number
     end?: number
     runtime?: boolean
-  }) {
+  }): Promise<TransactionBlockResponse> {
     const rpcUrl = this.getRpcUrl('dx.transaction_block')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: TransactionBlockResponse | string
+      ret: TransactionBlockResponse
     }>(rpcUrl, { body: json.stringify(params) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async transactionByHash(hash: string, shard_index?: number | string) {
+  async transactionByHash(hash: string, shard_index?: number | string): Promise<TransactionResponse> {
     const rpcUrl = this.getRpcUrl('dx.transaction')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: TransactionResponse | string
+      ret: TransactionResponse
     }>(rpcUrl, { body: json.stringify({ hash, shard_index }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async dappInfo(name: string) {
+  async dappInfo(name: string): Promise<DappInfoResponse> {
     const rpcUrl = this.getRpcUrl('dx.dapp')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: DappInfoResponse | string
+      ret: DappInfoResponse
     }>(rpcUrl, { body: json.stringify({ name }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async generateKey(shard_index?: string | number, algo?: number) {
+  async generateKey(shard_index?: string | number, algo?: KeyAlgorithm): Promise<GenerateKeyResponse> {
     const rpcUrl = this.getRpcUrl('dx.generate_key')
 
     const params = shakeKeyValue({ shard_index, algo }) as KeyValue<any>
@@ -196,65 +199,65 @@ class DxService extends Request {
       const resp = await this.post<{
         err?: number
         rsp: string
-        ret: GenerateKeyResponse | string
+        ret: GenerateKeyResponse
       }>(rpcUrl, { body: json.stringify(params) })
-      return resp
+      return this.handleResponse(resp)
     } else {
       const resp = await this.get<{
         err?: number
         rsp: string
-        ret: GenerateKeyResponse | string
+        ret: GenerateKeyResponse
       }>(rpcUrl, {})
-      return resp
+      return this.handleResponse(resp)
     }
   }
 
-  async isn(address: string) {
+  async isn(address: string): Promise<{ ISN: number }> {
     const rpcUrl = this.getRpcUrl('dx.isn')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: { ISN: number } | string
+      ret: { ISN: number }
     }>(rpcUrl, { body: json.stringify({ address }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async contractInfo(contract: string) {
+  async contractInfo(contract: string): Promise<ContractInfoResponse> {
     const rpcUrl = this.getRpcUrl('dx.contract_info')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: ContractInfoResponse | string
+      ret: ContractInfoResponse
     }>(rpcUrl, { body: json.stringify({ contract }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async tokenInfo(symbol: string) {
+  async tokenInfo(symbol: string): Promise<TokenInfoResponse> {
     const rpcUrl = this.getRpcUrl('dx.token')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: TokenInfoResponse | string
+      ret: TokenInfoResponse
     }>(rpcUrl, { body: json.stringify({ symbol }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 
-  async blockTime(height: number) {
+  async blockTime(height: number): Promise<{ BlockMinedTime: number }> {
     const rpcUrl = this.getRpcUrl('dx.block_time')
 
     const resp = await this.post<{
       err?: number
       rsp: string
-      ret: { BlockMinedTime: number } | string
+      ret: { BlockMinedTime: number }
     }>(rpcUrl, { body: json.stringify({ height }) })
 
-    return resp
+    return this.handleResponse(resp)
   }
 }
 

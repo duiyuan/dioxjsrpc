@@ -1,5 +1,5 @@
-# @dioxide-js/web3.js
-@dioxide-js/web3.js is a Nodejs SDK implementation of the [Dioxide RPC API](https://docs.dioxide.network/doc/RPC) and [Dioxide Service AI](https://docs.dioxide.network/doc/Dioscan%20Service%20API/)
+# @dioxide-js/dioxjs-nkp
+@dioxide-js/dioxjs-nkp is a Nodejs SDK implementation of the [Dioxide RPC API](https://docs.dioxide.network/doc/RPC) and [Dioxide Service AI](https://docs.dioxide.network/doc/Dioscan%20Service%20API/)
 
 ## Installation
 
@@ -12,13 +12,13 @@ npm install @dioxide-js/web3.js
 ### Using Yarn
 
 ```bash
-yarn add @dioxide-js/web3.js
+yarn add @dioxide-js/dioxjs-nkp
 ```
 
 ## Getting Started
 
 ```js
-import { Web3, NET } from '@dioxide-js/web3.js';
+import { Web3, NET } from '@dioxide-js/dioxjs-nkp';
 
 const web3 = new Web3(NET.TEST);
 
@@ -191,6 +191,280 @@ const txnHash = await web3.txn.transferFCA({
 })
 //txnHash
 ```
+### web3.dx
+
+Chain information query module.
+
+#### web3.dx.overview()
+Get chain overview information.
+```js
+const overview = await web3.dx.overview()
+// {
+//   VersionName: 'v1.0.0',
+//   DeployName: 'testnet',
+//   ChainVersion: 1,
+//   Time: 1703232000,
+//   BlockTime: 1000,
+//   ShardOrder: 2,
+//   ShardOnDuty: [0, 1, 2, 3],
+//   HeadHeight: 12345,
+//   HeadHash: 'abc123...',
+//   ...
+// }
+```
+
+#### web3.dx.getCommittedHeadHeight()
+Get committed head height and hash.
+```js
+const head = await web3.dx.getCommittedHeadHeight()
+// { HeadHeight: 12345, HeadHash: 'abc123...' }
+```
+
+#### web3.dx.isMining()
+Check if node is mining.
+```js
+const mining = await web3.dx.isMining()
+// { Mining: true }
+```
+
+#### web3.dx.getShardInfo(shard_index: number | string)
+Get shard information by index.
+```js
+const shardInfo = await web3.dx.getShardInfo(0)
+// {
+//   ShardIndex: 0,
+//   Height: 12345,
+//   SnapshotHeight: 12300,
+//   BlockInMem: 100,
+//   ResidentTxn: 50,
+//   PendingTxn: 10,
+//   RequestingTxn: 5,
+//   StateSize: 1000000,
+//   AccumTxnCount: [100, 200, 300]
+// }
+```
+
+#### web3.dx.getShardIndexByScope(scope: string, scope_key?: string)
+Get shard index by scope. Scope can be: `global`, `shard`, `address`, `uint32`, `uint64`, `uint128`, `uint256`, `uint512`.
+```js
+// For global scope
+const globalShard = await web3.dx.getShardIndexByScope('global')
+// { ShardIndex: 65535 }
+
+// For address scope
+const addressShard = await web3.dx.getShardIndexByScope('address', 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519')
+// { ShardIndex: 2 }
+```
+
+#### web3.dx.getMempool(shard_index?: number, archived?: number)
+Get mempool transactions. If no shard_index provided, returns all shards.
+```js
+// Get all shards mempool
+const allMempool = await web3.dx.getMempool()
+// { g: [...], 0: [...], 1: [...] }
+
+// Get specific shard mempool
+const shardMempool = await web3.dx.getMempool(65535)
+// [{ TXID: 'abc...', State: 'pending' }, ...]
+```
+
+#### web3.dx.getContractState(contract_with_scope: string, scope_key: string)
+Get contract state. Contract format: `<dapp>.<contract>.<scope>` or `<cid>.<scope>`.
+```js
+const state = await web3.dx.getContractState('core.coin.address', 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519')
+// {
+//   Size: 100,
+//   Contract: 'core.coin.address',
+//   State: { ... },
+//   BuildNum: '1',
+//   Commit: { Height: 12345, Proof: 0, Shard: [0, 1] }
+// }
+```
+
+#### web3.dx.getConsensusHeader(params: object)
+Get consensus header by height, hash, or range.
+```js
+// Query by height
+const header = await web3.dx.getConsensusHeader({ query_type: 0, height: 100 })
+
+// Query by hash
+const headerByHash = await web3.dx.getConsensusHeader({ query_type: 1, hash: 'abc123...' })
+
+// Query by range
+const headers = await web3.dx.getConsensusHeader({ query_type: 2, start: 100, end: 200 })
+```
+
+#### web3.dx.getTransactionBlock(params: object)
+Get transaction block by height, hash, or range.
+```js
+const block = await web3.dx.getTransactionBlock({
+  query_type: 0,
+  shard_index: 65535,
+  height: 100
+})
+// {
+//   Size: 1024,
+//   Version: 1,
+//   Scope: 'global',
+//   Shard: [65535, 2],
+//   Prev: 'abc...',
+//   Transactions: { Scheduled: [], Confirmed: [], DispatchedRelays: [], Deferred: [] },
+//   ...
+// }
+```
+
+#### web3.dx.getTransactionByHash(hash: string, shard_index?: number)
+Get transaction by hash.
+```js
+const tx = await web3.dx.getTransactionByHash('wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10')
+// {
+//   Hash: 'wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10',
+//   Function: 'core.coin.transfer',
+//   Input: { To: '...', Amount: '10000000' },
+//   ...
+// }
+```
+
+#### web3.dx.getDappInfo(name: string)
+Get dapp information by name. Name must be 4-8 characters, containing only letters, numbers, `_`, `-`, `#`, or `@`.
+```js
+const dapp = await web3.dx.getDappInfo('core')
+// { DAppID: 1, Address: 'core:dapp' }
+```
+
+#### web3.dx.generateKey(shard_index?: number, algo?: KeyAlgorithm)
+Generate a new key pair. Algo: 0 = ed25519, 1 = ethereum, 2 = sm2.
+```js
+const key = await web3.dx.generateKey(0, 0)
+// {
+//   PrivateKey: 'abc123...',
+//   PublicKey: 'def456...',
+//   Address: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
+//   Shard: 0
+// }
+```
+
+#### web3.dx.getISNByAddress(address: string)
+Get ISN (Invocation Sequence Number) by address.
+```js
+const isn = await web3.dx.getISNByAddress('core:dapp')
+// { ISN: 100 }
+```
+
+#### web3.dx.getContractInfo(contract: string)
+Get contract information.
+```js
+const contractInfo = await web3.dx.getContractInfo('core.coin.address')
+// {
+//   ContractID: 1,
+//   ContractVersionID: 1,
+//   Functions: ['transfer', 'mint', 'burn'],
+//   InterfaceImplemented: []
+// }
+```
+
+#### web3.dx.getTokenInfo(symbol: string)
+Get token information by symbol.
+```js
+const token = await web3.dx.getTokenInfo('DIO')
+// { TokenID: 0, Address: 'DIO:token' }
+```
+
+#### web3.dx.getBlockTime(height: number)
+Get block mined time by height.
+```js
+const blockTime = await web3.dx.getBlockTime(100)
+// { BlockMinedTime: 1703232000 }
+```
+
+### web3.tx
+
+Transaction module for composing, signing, and sending transactions.
+
+#### web3.tx.compose(params: object)
+Compose a transaction. Returns unsigned transaction data.
+
+**Parameters:**
+- `function` (Required): Contract method call, format: `<dapp>.<contract>.<function>`
+- `args` (Required): Contract method arguments as JSON object
+- `sender` (Optional): Sender address
+- `delegatee` (Optional): Delegatee address
+- `gasprice` (Optional): Gas price, defaults to current average
+- `ttl` (Optional): Time to live in minutes (1-480), default 30
+- `sigcount` (Optional): Number of signers, default 1
+- `tokens` (Optional): Tokens to carry, format `[{tokenId: amount}, ...]`
+- `gaslimit` (Optional): Max gas limit (uint32)
+- `isn` (Optional): Custom ISN field
+
+**System Contract Methods:**
+
+| Contract | Method | Description | Args |
+|----------|--------|-------------|------|
+| `core.coin` | `faucet` | Get test DIO tokens | - |
+| `core.coin` | `mint` | Mint DIO tokens | `{ Amount: number }` |
+| `core.coin` | `burn` | Burn DIO tokens | `{ Amount: number }` |
+| `core.coin` | `transfer` | Transfer DIO tokens | `{ To: string, Amount: number }` |
+| `core.wallet` | `transfer` | Transfer tokens | `{ To: string, TokenId: string, Amount: number }` |
+| `core.wallet` | `burn` | Burn tokens | `{ TokenId: string, Amount: number }` |
+| `core.wallet` | `reclaim` | Reclaim gas/token residual | `{ Refund: boolean, Residual: boolean, Token: string }` |
+| `core.delegation` | `create` | Create dapp | `{ Type: 10, Name: string, Deposit: number }` |
+| `core.delegation` | `deploy_contracts` | Deploy contracts | `{ code: string[], cargs: string[], time?: number }` |
+| `core.delegation` | `create_token` | Create token | `{ Symbol: string, InitSupply: number, Decimals: number, ... }` |
+| `core.profile` | `set` | Set metadata | `{ Metadata: object }` |
+
+```js
+const composed = await web3.tx.compose({
+  sender: 'eqfkk71rg18mcjcp63tkcz4xpcxd91wtd5atpwk82j2jmcdeb50j6es2xm:ed25519',
+  function: 'core.coin.transfer',
+  args: {
+    To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+    Amount: 10000000000
+  },
+  gasprice: 100,
+  ttl: 30
+})
+// { TxData: 'base64encodeddata...', GasOffered: 21000 }
+```
+
+#### web3.tx.sign(params: { sk: string[], txdata: string })
+Sign a composed transaction with private key(s).
+```js
+const signed = await web3.tx.sign({
+  sk: ['privatekey1'],
+  txdata: composed.TxData
+})
+// { TxData: 'signedbase64data...' }
+```
+
+#### web3.tx.send(params: { txdata: string })
+Send a signed transaction to the network.
+```js
+const result = await web3.tx.send({ txdata: signed.TxData })
+// { Hash: 'wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10' }
+```
+
+#### web3.tx.sendWithSK(params: object)
+Compose, sign, and send transaction in one step. **For development use only!**
+
+**Parameters:**
+- `privatekey` (Required): User private key
+- `function` (Required): Contract method name
+- `args` (Optional): Contract method arguments
+- `delegatee` (Optional): Delegatee address
+- `tokens` (Optional): Tokens to carry
+
+```js
+const result = await web3.tx.sendWithSK({
+  privatekey: 'your_private_key',
+  function: 'core.coin.transfer',
+  args: {
+    To: 'qzysdapqk4q3442fx59y2ajnsbx5maz3d6japb7jngjrqq5xqddh60n420:ed25519',
+    Amount: 10000000000
+  }
+})
+// { Hash: 'wkapenmgkqre483cg344a8bxstrq4nsj1matcdmtjna03tcmkc10' }
+```
+
 ### utils
 
 #### utils.generateAddress(targetShardIndex: number): { address: string, seed:Unit8Array }
@@ -327,6 +601,115 @@ interface ListParams {
   height?: number
   pos?: number
   limit?: number
+}
+```
+
+### OverviewResponse
+```js
+interface OverviewResponse {
+  VersionName: string
+  DeployName: string
+  ChainVersion: number
+  Time: number
+  BlockTime: number
+  ShardOrder: number
+  ShardOnDuty: number[]
+  BlackListSize: number
+  ScalingOut: boolean
+  Rebase: boolean
+  BaseHeight: number
+  HeadHash: string
+  HeadHeight: number
+  TxnCount: number[]
+  AvgGasPrice: string
+}
+```
+
+### ShardInfoResponse
+```js
+interface ShardInfoResponse {
+  ShardIndex: number
+  Height: number
+  SnapshotHeight: number
+  BlockInMem: number
+  ResidentTxn: number
+  PendingTxn: number
+  RequestingTxn: number
+  StateSize: number
+  AccumTxnCount: number[]
+}
+```
+
+### ContractStateResponse
+```js
+interface ContractStateResponse {
+  Size: number
+  Contract: string
+  State: Record<string, any>
+  BuildNum: string
+  Commit: {
+    Height: number
+    Proof: number
+    Shard: number[]
+  }
+}
+```
+
+### ContractInfoResponse
+```js
+interface ContractInfoResponse {
+  ContractID: number
+  ContractVersionID: number
+  Functions: string[]
+  InterfaceImplemented: string[]
+}
+```
+
+### GenerateKeyResponse
+```js
+interface GenerateKeyResponse {
+  PrivateKey: string
+  PublicKey: string
+  Address: string
+  Shard: number | string
+}
+```
+
+### TransactionBlock
+```js
+interface TransactionBlock {
+  Size: number
+  Version: number
+  Scope: string
+  Shard: number[]
+  Prev: string
+  Transactions: {
+    Scheduled: string[]
+    Confirmed: string[]
+    DispatchedRelays: string[]
+    Deferred: string[]
+  }
+  Hash: string
+  Height: number
+  Timestamp: number
+}
+```
+
+### KeyAlgorithm
+```js
+enum KeyAlgorithm {
+  ED25519 = 0,
+  ETHEREUM = 1,
+  SM2 = 2
+}
+```
+
+### ConsensusHeaderQueryType
+```js
+enum ConsensusHeaderQueryType {
+  HEIGHT = 0,  // Query by height
+  HASH = 1,    // Query by hash
+  RANGE = 2    // Query by range (start/end)
 }
 ```
 

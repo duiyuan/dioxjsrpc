@@ -11,26 +11,26 @@ describe('Tx unit test', () => {
     })
 
     console.log('composeResp', composeResp)
-    expect(composeResp.ret).toMatchObject({
+    expect(composeResp).toMatchObject({
       TxData: expect.any(String),
       GasOffered: expect.any(Number),
     })
 
     const signResp = await web3.tx.sign({
       sk: ['JKntzEPdFv7W5qnAjHR170onkQdH4trrQLNJAgyrkvS7l1ESw4Ku8DxkWS+2x5f6bJFJDlzGSbwheACvz5m6/w=='],
-      txdata: composeResp.ret.TxData,
+      txdata: composeResp.TxData,
     })
 
     console.log('signResp', signResp)
-    expect(signResp.ret).toMatchObject({
+    expect(signResp).toMatchObject({
       TxData: expect.any(String),
     })
 
     const sendResp = await web3.tx.send({
-      txdata: signResp.ret.TxData,
+      txdata: signResp.TxData,
     })
     console.log('sendResp', sendResp)
-    expect(sendResp.ret).toMatchObject({
+    expect(sendResp).toMatchObject({
       Hash: expect.any(String),
     })
   })
@@ -49,7 +49,7 @@ describe('Tx unit test', () => {
     })
 
     console.log('sendWithSKResp', resp)
-    expect(resp.ret).toMatchObject({
+    expect(resp).toMatchObject({
       Hash: expect.any(String),
     })
   })

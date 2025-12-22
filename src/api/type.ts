@@ -63,6 +63,35 @@ export declare namespace DIOX {
     TokenDecimals: number
   }
 
+  /**
+   * Relay transaction invocation info
+   */
+  interface RelayInvocation {
+    GasFee: string
+    Relays: string[]
+    Return: [number, number]
+    Status: string
+    CoinDelta: string
+  }
+
+  /**
+   * Relay transaction info (nested in TxDetail.Relays)
+   */
+  interface RelayTransaction {
+    Mode: string
+    Input: Record<string, any>
+    Grouped: boolean
+    BuildNum: number
+    Function: string
+    GasPrice: string
+    uTxnSize: number
+    Initiator: string
+    GasOffered: number
+    Invocation: RelayInvocation
+    OrigTxHash: string
+    OrigExecIdx: number
+  }
+
   interface TxDetail {
     BlockTime: number
     Height: number
@@ -78,7 +107,7 @@ export declare namespace DIOX {
     Grouped: false
     Hash: string
     Packing?: string
-    Relays?: Array<TxDetail>
+    Relays?: Array<RelayTransaction>
     Input: {
       [key: string]: string | number
     }
@@ -595,4 +624,16 @@ export interface ContractInfoResponse {
 export interface TokenInfoResponse {
   Address: string
   TokenID: number
+}
+
+export enum ConsensusHeaderQueryType {
+  HEIGHT = 0,
+  HASH = 1,
+  RANGE = 2,
+}
+
+export enum KeyAlgorithm {
+  ED25519 = 0,
+  ETHEREUM = 1,
+  SM2 = 2,
 }
