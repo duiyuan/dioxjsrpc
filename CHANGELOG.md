@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.38 (2025-12-30)
+
+
+### Features
+
+* bc rpc sdk ([da21ccc](https://github.com/duiyuan/dioxjsrpc/commit/da21ccc52c03a2250c3a4a85b397a089e8116d77))
+* newProofByProofkey ([ecd75b6](https://github.com/duiyuan/dioxjsrpc/commit/ecd75b6c77a3c2835f6100ec75cad212104c12a2))
+
+
+### Bug Fixes
+
+* 64bytes publickey ([3151b46](https://github.com/duiyuan/dioxjsrpc/commit/3151b46271ac65448a304942259bc9d6c2561326))
+* abi undefined ([9460658](https://github.com/duiyuan/dioxjsrpc/commit/9460658ec09f536f4fcca1b8c5d19f9515b2dcc6))
+* build error ([3afab3f](https://github.com/duiyuan/dioxjsrpc/commit/3afab3f7489da3c61f1e4290a2ea2fc3d6a46cc8))
+* endpoint ([d4af414](https://github.com/duiyuan/dioxjsrpc/commit/d4af414ac24420e045c78ffff2f7e8f97d7a6d3f))
+* esmodule ([9e7e52f](https://github.com/duiyuan/dioxjsrpc/commit/9e7e52f284e5515386e56d714f52c9f5acc85ffc))
+* hash ([7d54d2b](https://github.com/duiyuan/dioxjsrpc/commit/7d54d2b449f3342132bcf1de84cb10e281c0d055))
+* hash not used ([15ddc7a](https://github.com/duiyuan/dioxjsrpc/commit/15ddc7a50b086298e6b1a0d3dc4a32f3e39bf5d6))
+* ishex ([88cb3b5](https://github.com/duiyuan/dioxjsrpc/commit/88cb3b518111662d70ee1f50b0ee6cc877058d2f))
+* proof example ([fd23ff1](https://github.com/duiyuan/dioxjsrpc/commit/fd23ff152594b9907ce126597c376202ae5f32af))
+* proofs ([ccd5b4d](https://github.com/duiyuan/dioxjsrpc/commit/ccd5b4da2e7525ba1e53133612f0c3740a0b5cc9))
+* proofs.check ([e738296](https://github.com/duiyuan/dioxjsrpc/commit/e7382968c262bc5dcefc3d65262eeb04eba15310))
+* type declare ([7150fcf](https://github.com/duiyuan/dioxjsrpc/commit/7150fcf4e9e233b70f024cb69c44854ff1ef2c3f))
+
 ### [0.2.37](https://github.com/duiyuan/diox_silas_sdk/compare/v0.2.36...v0.2.37) (2025-09-30)
 
 ### [0.2.36](https://github.com/duiyuan/diox_silas_sdk/compare/v0.2.35...v0.2.36) (2025-09-24)
