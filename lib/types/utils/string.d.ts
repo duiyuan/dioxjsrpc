@@ -1,0 +1,11 @@
+import BigNumber from 'bignumber.js';
+export declare const shakeKeyValue: (params: KeyValue | undefined) => KeyValue<any> | undefined;
+export declare const bignumberMult: (val1: number | string, val2: BigNumber.Value) => string;
+export declare const bignumberMinus: (val1: BigNumber.Value, val2: BigNumber.Value) => BigNumber;
+export declare const bignumberPlus: (val1: BigNumber.Value, val2: BigNumber.Value) => BigNumber;
+export declare const bignumberPow: (val1: BigNumber.Value, power: number) => BigNumber;
+export declare const bignumberDiv: (v1: BigNumber.Value, v2: BigNumber.Value) => BigNumber;
+export declare const bignumberLt: (v1: BigNumber.Value, v2: BigNumber.Value) => boolean;
+export declare const toTokenAmount: (amount: string, decimals: number) => string;
+export declare const fullAddress: (address: string) => string;
+//# sourceMappingURL=string.d.ts.map
