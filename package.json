@@ -1,5 +1,5 @@
 {
-  "name": "@dioxide-js/dioxjs-nkp",
+  "name": "dioxjs-nkp",
   "version": "0.0.14",
   "description": "dioxide javascript rpc API",
   "main": "./lib/commonjs/index.js",
