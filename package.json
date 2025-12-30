@@ -1,6 +1,6 @@
 {
   "name": "@dioxide-js/dioxjs-nkp",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "dioxide javascript rpc API",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/esm/index.js",
