@@ -1,0 +1,74 @@
+import axios, { AxiosRequestConfig } from 'axios'
+import provider from './provider'
+import { composeParams } from './rpc'
+
+const TIMEOUT = 30 * 1000
+
+export default class Fetcher {
+  apiKey = ''
+
+  get autherization() {
+    return 'Bearer ' + this.apiKey
+  }
+
+  constructor(opts: { apiKey?: string }) {
+    const { apiKey } = opts
+    this.apiKey = apiKey ?? provider.apiKey ?? ''
+  }
+
+  prune = (url: string) => (url.endsWith('/') ? url.slice(0, -1) : url)
+
+  async postToBC<T>(action: string, payload: { [key: string]: any }, opts: AxiosRequestConfig = {}): Promise<T> {
+    return this.post(action, payload, true, opts)
+  }
+
+  async post<T>(action: string, payload: any = {}, toBC = false, opts: AxiosRequestConfig = {}): Promise<T> {
+    const { dioxide } = provider.get()
+    const host = this.prune(dioxide)
+    const data = composeParams(action, toBC, payload)
+
+    const options: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.autherization,
+      },
+      timeout: TIMEOUT,
+      ...opts,
+    }
+    const resp: CommonResponse<T> = await axios.post(host + '/api/jsonrpc/v1', data, options).then((r) => r.data)
+
+    const { error, result } = resp
+    if (error) {
+      throw error.message
+    }
+    return result
+  }
+
+  /**
+   * REST request
+   * @param url full request address (contains query parameters)
+   * @param params  parameters to send as body
+   * @example: url: http://{{local_rpc}}/api?req=dx.overview
+   */
+
+  async rest<T>(url: string, params: any = {}, opts: AxiosRequestConfig = {}): Promise<T> {
+    if (!url) {
+      throw new Error('url is required for REST request')
+    }
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: this.autherization,
+      ...(opts.headers || {}),
+    }
+
+    const { data } = await axios.get<T>(url, {
+      ...opts,
+      headers,
+      data: params,
+      timeout: opts.timeout ?? TIMEOUT,
+    })
+
+    return data
+  }
+}
